@@ -71,6 +71,9 @@ body {
     width: 200px;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    text-decoration: none;
+    color: inherit;
+    display: block;
 }
 
 /* Itinerary Section */
@@ -96,6 +99,8 @@ footer {
     text-align: center;
     padding: 10px;
 }
+
+/* Destination Pages */
 .small-hero {
     padding: 60px 20px;
     background: #d4af37;
