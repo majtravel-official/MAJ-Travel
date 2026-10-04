@@ -2,15 +2,30 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f7f7f7;
     margin: 0;
+    padding: 0;
+}
+
+.hero {
+    background: #d4af37;
+    color: white;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.features {
     padding: 20px;
-}
-
-h1 {
-    color: #d4af37; /* MAJ Travel gold */
     text-align: center;
 }
 
-p {
-    text-align: center;
-    font-size: 18px;
+.features ul {
+    list-style: none;
+    padding: 0;
+}
+
+.features li {
+    background: white;
+    margin: 10px auto;
+    padding: 10px;
+    max-width: 300px;
+    border-radius: 6px;
 }
