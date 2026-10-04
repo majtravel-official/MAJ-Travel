@@ -96,3 +96,23 @@ footer {
     text-align: center;
     padding: 10px;
 }
+.small-hero {
+    padding: 60px 20px;
+    background: #d4af37;
+    color: white;
+    text-align: center;
+}
+
+.destination-info {
+    padding: 20px;
+    max-width: 600px;
+    margin: auto;
+}
+
+.back-btn {
+    display: inline-block;
+    margin-top: 20px;
+    color: #d4af37;
+    text-decoration: none;
+    font-weight: bold;
+}
