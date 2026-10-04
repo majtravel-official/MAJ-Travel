@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Itinerary Builder – MAJ Travel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="small-hero">
+        <h2>Itinerary Builder</h2>
+        <p>Create your custom travel plan step by step.</p>
+    </header>
+
+    <section class="destination-info">
+        <h3>Add a Stop</h3>
+
+        <input id="stopInput" type="text" placeholder="Enter a location or activity" style="width:100%; padding:10px; border-radius:5px; border:1px solid #ccc;">
+
+        <button onclick="addStop()" style="margin-top:10px; padding:10px 20px; background:#d4af37; border:none; color:white; border-radius:5px; cursor:pointer;">
+            Add to Itinerary
+        </button>
+
+        <h3 style="margin-top:30px;">Your Itinerary</h3>
+        <ul id="itineraryList" style="padding-left:20px;"></ul>
+
+        <a class="back-btn" href="index.html">← Back to Home</a>
+    </section>
+
+    <script>
+        function addStop() {
+            const input = document.getElementById("stopInput");
+            const list = document.getElementById("itineraryList");
+
+            if (input.value.trim() !== "") {
+                const li = document.createElement("li");
+                li.textContent = input.value;
+                list.appendChild(li);
+                input.value = "";
+            }
+        }
+    </script>
+
+</body>
+</html>
