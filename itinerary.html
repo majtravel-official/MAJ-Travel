@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
- 
+
     <header class="small-hero">
         <h2>Itinerary Builder</h2>
         <p>Create your custom travel plan step by step.</p>
@@ -22,6 +22,11 @@
             <option value="day2">Day 2</option>
             <option value="day3">Day 3</option>
         </select>
+
+        <!-- Select Time -->
+        <h3 style="margin-top:20px;">Select Time</h3>
+        <input id="timeInput" type="time" 
+               style="width:100%; padding:10px; border-radius:5px; border:1px solid #ccc;">
 
         <!-- Add Stop -->
         <h3 style="margin-top:20px;">Add a Stop</h3>
@@ -51,14 +56,19 @@
     <script>
         function addStop() {
             const input = document.getElementById("stopInput");
+            const time = document.getElementById("timeInput").value;
             const day = document.getElementById("daySelect").value;
 
             if (input.value.trim() !== "") {
                 const li = document.createElement("li");
-                li.textContent = input.value;
+
+                // Format: "09:00 — Weymouth Beach"
+                li.textContent = (time ? time + " — " : "") + input.value;
 
                 document.getElementById(day + "List").appendChild(li);
+
                 input.value = "";
+                timeInput.value = "";
             }
         }
     </script>
