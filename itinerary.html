@@ -43,7 +43,6 @@
 
     <section class="destination-info">
 
-        <!-- Select Day -->
         <h3>Select Day</h3>
         <select id="daySelect" style="width:100%; padding:10px; border-radius:5px; border:1px solid #ccc;">
             <option value="day1">Day 1</option>
@@ -51,12 +50,10 @@
             <option value="day3">Day 3</option>
         </select>
 
-        <!-- Select Time -->
         <h3 style="margin-top:20px;">Select Time</h3>
         <input id="timeInput" type="time" 
                style="width:100%; padding:10px; border-radius:5px; border:1px solid #ccc;">
 
-        <!-- Add Stop -->
         <h3 style="margin-top:20px;">Add a Stop</h3>
         <input id="stopInput" type="text" placeholder="Enter a location or activity" 
                style="width:100%; padding:10px; border-radius:5px; border:1px solid #ccc;">
@@ -66,7 +63,6 @@
             Add to Itinerary
         </button>
 
-        <!-- Day Lists -->
         <h3 style="margin-top:30px;">Your Itinerary</h3>
 
         <h4>Day 1</h4>
@@ -90,19 +86,16 @@
             if (input.value.trim() !== "") {
                 const li = document.createElement("li");
 
-                // Drag handle
                 const handle = document.createElement("span");
                 handle.className = "drag-handle";
                 handle.textContent = "⋮⋮";
 
-                // Text
                 const text = document.createElement("span");
                 text.textContent = (time ? time + " — " : "") + input.value;
 
                 li.appendChild(handle);
                 li.appendChild(text);
 
-                // Enable drag-and-drop
                 li.draggable = true;
                 li.addEventListener("dragstart", dragStart);
                 li.addEventListener("dragend", dragEnd);
