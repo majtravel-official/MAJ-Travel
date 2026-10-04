@@ -5,6 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Itinerary Builder – MAJ Travel</title>
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        li {
+            padding: 8px;
+            margin: 4px 0;
+            background: #f7f7f7;
+            border-radius: 5px;
+            cursor: grab;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        li:active {
+            cursor: grabbing;
+        }
+
+        .drag-handle {
+            font-weight: bold;
+            cursor: grab;
+            user-select: none;
+        }
+
+        li.dragging {
+            opacity: 0.5;
+            background: #e0e0e0;
+        }
+    </style>
 </head>
 <body>
  
@@ -62,11 +90,22 @@
             if (input.value.trim() !== "") {
                 const li = document.createElement("li");
 
-                li.textContent = (time ? time + " — " : "") + input.value;
+                // Drag handle
+                const handle = document.createElement("span");
+                handle.className = "drag-handle";
+                handle.textContent = "⋮⋮";
+
+                // Text
+                const text = document.createElement("span");
+                text.textContent = (time ? time + " — " : "") + input.value;
+
+                li.appendChild(handle);
+                li.appendChild(text);
 
                 // Enable drag-and-drop
                 li.draggable = true;
                 li.addEventListener("dragstart", dragStart);
+                li.addEventListener("dragend", dragEnd);
                 li.addEventListener("dragover", dragOver);
                 li.addEventListener("drop", dropItem);
 
@@ -81,7 +120,12 @@
 
         function dragStart(e) {
             draggedItem = e.target;
+            e.target.classList.add("dragging");
             e.dataTransfer.effectAllowed = "move";
+        }
+
+        function dragEnd(e) {
+            e.target.classList.remove("dragging");
         }
 
         function dragOver(e) {
@@ -90,9 +134,9 @@
 
         function dropItem(e) {
             e.preventDefault();
-            const list = e.target.parentNode;
+            const list = e.target.closest("ul");
 
-            if (draggedItem !== e.target) {
+            if (draggedItem && list && draggedItem !== e.target) {
                 list.insertBefore(draggedItem, e.target.nextSibling);
             }
         }
