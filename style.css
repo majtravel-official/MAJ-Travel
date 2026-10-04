@@ -1,0 +1,16 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    color: #d4af37; /* MAJ Travel gold */
+    text-align: center;
+}
+
+p {
+    text-align: center;
+    font-size: 18px;
+}
