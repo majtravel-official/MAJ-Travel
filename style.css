@@ -1,31 +1,98 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f7f7f7;
     margin: 0;
-    padding: 0;
+    background: #f7f7f7;
 }
 
+/* Navigation */
+.navbar {
+    background: #d4af37;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links li {
+    cursor: pointer;
+}
+
+/* Hero */
 .hero {
+    background: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e') center/cover no-repeat;
+    color: white;
+    padding: 100px 20px;
+    text-align: center;
+}
+
+.search-box {
+    margin-top: 20px;
+}
+
+.search-box input {
+    padding: 10px;
+    width: 250px;
+    border-radius: 5px;
+    border: none;
+}
+
+.search-box button {
+    padding: 10px 20px;
+    background: #d4af37;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Destination Cards */
+.destinations {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    width: 200px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Itinerary Section */
+.itinerary {
+    padding: 40px 20px;
+    text-align: center;
+    background: #fff;
+}
+
+.itinerary-btn {
+    padding: 10px 20px;
+    background: #d4af37;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Footer */
+footer {
     background: #d4af37;
     color: white;
-    padding: 60px 20px;
     text-align: center;
-}
-
-.features {
-    padding: 20px;
-    text-align: center;
-}
-
-.features ul {
-    list-style: none;
-    padding: 0;
-}
-
-.features li {
-    background: white;
-    margin: 10px auto;
     padding: 10px;
-    max-width: 300px;
-    border-radius: 6px;
 }
