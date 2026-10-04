@@ -5,8 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Itinerary Builder – MAJ Travel</title>
     <link rel="stylesheet" href="style.css">
- 
+
     <style>
+        ul {
+            min-height: 40px;
+            padding: 10px;
+            border-radius: 5px;
+            background: #fafafa;
+            transition: background 0.2s;
+        }
+
+        ul.highlight {
+            background: #fff3c4;
+        }
+
         li {
             padding: 8px;
             margin: 4px 0;
@@ -44,16 +56,6 @@
         .delete-btn:hover {
             color: #ff0000;
         }
-
-        ul {
-            min-height: 40px;
-            padding-bottom: 10px;
-        }
-
-        ul.highlight {
-            background: #fff7d1;
-            border-radius: 5px;
-        }
     </style>
 </head>
 <body>
@@ -88,13 +90,13 @@
         <h3 style="margin-top:30px;">Your Itinerary</h3>
 
         <h4>Day 1</h4>
-        <ul id="day1List" class="sortable"></ul>
+        <ul id="day1List"></ul>
 
         <h4>Day 2</h4>
-        <ul id="day2List" class="sortable"></ul>
+        <ul id="day2List"></ul>
 
         <h4>Day 3</h4>
-        <ul id="day3List" class="sortable"></ul>
+        <ul id="day3List"></ul>
 
         <a class="back-btn" href="index.html">← Back to Home</a>
     </section>
@@ -147,80 +149,3 @@
             textSpan.textContent = text;
 
             const del = document.createElement("span");
-            del.className = "delete-btn";
-            del.textContent = "❌";
-            del.onclick = () => { li.remove(); saveItinerary(); };
-
-            li.appendChild(handle);
-            li.appendChild(textSpan);
-            li.appendChild(del);
-
-            li.draggable = true;
-            li.addEventListener("dragstart", dragStart);
-            li.addEventListener("dragend", dragEnd);
-
-            return li;
-        }
-
-        function addStop() {
-            const input = document.getElementById("stopInput");
-            const time = document.getElementById("timeInput").value;
-            const day = document.getElementById("daySelect").value;
-
-            if (input.value.trim() !== "") {
-                const text = (time ? time + " — " : "") + input.value;
-                const li = createListItem(text);
-
-                document.getElementById(day + "List").appendChild(li);
-
-                input.value = "";
-                document.getElementById("timeInput").value = "";
-
-                saveItinerary();
-            }
-        }
-
-        let draggedItem = null;
-
-        function dragStart(e) {
-            draggedItem = e.target;
-            e.target.classList.add("dragging");
-
-            document.querySelectorAll("ul").forEach(list => {
-                list.addEventListener("dragover", dragOver);
-                list.addEventListener("drop", dropItem);
-                list.classList.add("highlight");
-            });
-        }
-
-        function dragEnd(e) {
-            e.target.classList.remove("dragging");
-
-            document.querySelectorAll("ul").forEach(list => {
-                list.removeEventListener("dragover", dragOver);
-                list.removeEventListener("drop", dropItem);
-                list.classList.remove("highlight");
-            });
-
-            saveItinerary();
-        }
-
-        function dragOver(e) {
-            e.preventDefault();
-        }
-
-        function dropItem(e) {
-            e.preventDefault();
-            const list = e.currentTarget;
-
-            if (draggedItem && list) {
-                list.appendChild(draggedItem);
-                saveItinerary();
-            }
-        }
-
-        loadItinerary();
-    </script>
-
-</body>
-</html>
