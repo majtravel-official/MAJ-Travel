@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Printable Itinerary – MAJ Travel</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #ffffff;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 10px;
+            color: #d4af37;
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-top: 40px;
+            margin-bottom: 10px;
+            color: #d4af37;
+            border-left: 6px solid #d4af37;
+            padding-left: 10px;
+        }
+
+        ul {
+            list-style: none;
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+
+        li {
+            font-size: 18px;
+            margin: 6px 0;
+            padding: 6px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .no-items {
+            font-style: italic;
+            color: #777;
+            margin-left: 20px;
+        }
+
+        .print-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background: #d4af37;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        @media print {
+            .print-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>MAJ Travel – Your Itinerary</h1>
+
+    <button class="print-btn" onclick="window.print()">Print / Save as PDF</button>
+
+    <div id="content"></div>
+
+    <script>
+        function loadItinerary() {
+            const saved = localStorage.getItem("itineraryData");
+            const container = document.getElementById("content");
+
+            if (!saved) {
+                container.innerHTML = "<p>No itinerary found.</p>";
+                return;
+            }
+
+            const data = JSON.parse(saved);
+
+            ["day1", "day2", "day3"].forEach((day, index) => {
+                const dayTitle = document.createElement("h2");
+                dayTitle.textContent = "Day " + (index + 1);
+                container.appendChild(dayTitle);
+
+                const list = document.createElement("ul");
+
+                if (data[day].length === 0) {
+                    const empty = document.createElement("p");
+                    empty.className = "no-items";
+                    empty.textContent = "No stops added.";
+                    container.appendChild(empty);
+                } else {
+                    data[day].forEach(item => {
+                        const li = document.createElement("li");
+                        li.textContent = item.text;
+                        list.appendChild(li);
+                    });
+                    container.appendChild(list);
+                }
+            });
+        }
+
+        loadItinerary();
+    </script>
+
+</body>
+</html>
