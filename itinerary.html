@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Itinerary Builder – MAJ Travel</title>
     <link rel="stylesheet" href="style.css">
- 
+
     <style>
         li {
             padding: 8px;
@@ -44,6 +44,16 @@
         .delete-btn:hover {
             color: #ff0000;
         }
+
+        ul {
+            min-height: 40px;
+            padding-bottom: 10px;
+        }
+
+        ul.highlight {
+            background: #fff7d1;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -78,13 +88,13 @@
         <h3 style="margin-top:30px;">Your Itinerary</h3>
 
         <h4>Day 1</h4>
-        <ul id="day1List" class="sortable" style="padding-left:20px;"></ul>
+        <ul id="day1List" class="sortable"></ul>
 
         <h4>Day 2</h4>
-        <ul id="day2List" class="sortable" style="padding-left:20px;"></ul>
+        <ul id="day2List" class="sortable"></ul>
 
         <h4>Day 3</h4>
-        <ul id="day3List" class="sortable" style="padding-left:20px;"></ul>
+        <ul id="day3List" class="sortable"></ul>
 
         <a class="back-btn" href="index.html">← Back to Home</a>
     </section>
@@ -122,6 +132,11 @@
         }
 
         function addLoadedStop(day, text) {
+            const li = createListItem(text);
+            document.getElementById(day + "List").appendChild(li);
+        }
+
+        function createListItem(text) {
             const li = document.createElement("li");
 
             const handle = document.createElement("span");
@@ -143,10 +158,8 @@
             li.draggable = true;
             li.addEventListener("dragstart", dragStart);
             li.addEventListener("dragend", dragEnd);
-            li.addEventListener("dragover", dragOver);
-            li.addEventListener("drop", dropItem);
 
-            document.getElementById(day + "List").appendChild(li);
+            return li;
         }
 
         function addStop() {
@@ -155,29 +168,8 @@
             const day = document.getElementById("daySelect").value;
 
             if (input.value.trim() !== "") {
-                const li = document.createElement("li");
-
-                const handle = document.createElement("span");
-                handle.className = "drag-handle";
-                handle.textContent = "⋮⋮";
-
-                const text = document.createElement("span");
-                text.textContent = (time ? time + " — " : "") + input.value;
-
-                const del = document.createElement("span");
-                del.className = "delete-btn";
-                del.textContent = "❌";
-                del.onclick = () => { li.remove(); saveItinerary(); };
-
-                li.appendChild(handle);
-                li.appendChild(text);
-                li.appendChild(del);
-
-                li.draggable = true;
-                li.addEventListener("dragstart", dragStart);
-                li.addEventListener("dragend", dragEnd);
-                li.addEventListener("dragover", dragOver);
-                li.addEventListener("drop", dropItem);
+                const text = (time ? time + " — " : "") + input.value;
+                const li = createListItem(text);
 
                 document.getElementById(day + "List").appendChild(li);
 
@@ -193,10 +185,23 @@
         function dragStart(e) {
             draggedItem = e.target;
             e.target.classList.add("dragging");
+
+            document.querySelectorAll("ul").forEach(list => {
+                list.addEventListener("dragover", dragOver);
+                list.addEventListener("drop", dropItem);
+                list.classList.add("highlight");
+            });
         }
 
         function dragEnd(e) {
             e.target.classList.remove("dragging");
+
+            document.querySelectorAll("ul").forEach(list => {
+                list.removeEventListener("dragover", dragOver);
+                list.removeEventListener("drop", dropItem);
+                list.classList.remove("highlight");
+            });
+
             saveItinerary();
         }
 
@@ -206,10 +211,10 @@
 
         function dropItem(e) {
             e.preventDefault();
-            const list = e.target.closest("ul");
+            const list = e.currentTarget;
 
-            if (draggedItem && list && draggedItem !== e.target) {
-                list.insertBefore(draggedItem, e.target.nextSibling);
+            if (draggedItem && list) {
+                list.appendChild(draggedItem);
                 saveItinerary();
             }
         }
