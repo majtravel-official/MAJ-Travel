@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Itinerary Builder – MAJ Travel</title>
     <link rel="stylesheet" href="style.css">
- 
+
     <style>
         li {
             padding: 8px;
@@ -90,6 +90,65 @@
     </section>
 
     <script>
+        function saveItinerary() {
+            const data = {
+                day1: getListData("day1List"),
+                day2: getListData("day2List"),
+                day3: getListData("day3List")
+            };
+            localStorage.setItem("itineraryData", JSON.stringify(data));
+        }
+
+        function getListData(listId) {
+            const items = document.querySelectorAll(`#${listId} li`);
+            return Array.from(items).map(li => {
+                return {
+                    text: li.querySelector("span:nth-child(2)").textContent
+                };
+            });
+        }
+
+        function loadItinerary() {
+            const saved = localStorage.getItem("itineraryData");
+            if (!saved) return;
+
+            const data = JSON.parse(saved);
+
+            ["day1", "day2", "day3"].forEach(day => {
+                const list = document.getElementById(day + "List");
+                list.innerHTML = "";
+                data[day].forEach(item => addLoadedStop(day, item.text));
+            });
+        }
+
+        function addLoadedStop(day, text) {
+            const li = document.createElement("li");
+
+            const handle = document.createElement("span");
+            handle.className = "drag-handle";
+            handle.textContent = "⋮⋮";
+
+            const textSpan = document.createElement("span");
+            textSpan.textContent = text;
+
+            const del = document.createElement("span");
+            del.className = "delete-btn";
+            del.textContent = "❌";
+            del.onclick = () => { li.remove(); saveItinerary(); };
+
+            li.appendChild(handle);
+            li.appendChild(textSpan);
+            li.appendChild(del);
+
+            li.draggable = true;
+            li.addEventListener("dragstart", dragStart);
+            li.addEventListener("dragend", dragEnd);
+            li.addEventListener("dragover", dragOver);
+            li.addEventListener("drop", dropItem);
+
+            document.getElementById(day + "List").appendChild(li);
+        }
+
         function addStop() {
             const input = document.getElementById("stopInput");
             const time = document.getElementById("timeInput").value;
@@ -108,7 +167,7 @@
                 const del = document.createElement("span");
                 del.className = "delete-btn";
                 del.textContent = "❌";
-                del.onclick = () => li.remove();
+                del.onclick = () => { li.remove(); saveItinerary(); };
 
                 li.appendChild(handle);
                 li.appendChild(text);
@@ -124,6 +183,8 @@
 
                 input.value = "";
                 document.getElementById("timeInput").value = "";
+
+                saveItinerary();
             }
         }
 
@@ -132,11 +193,11 @@
         function dragStart(e) {
             draggedItem = e.target;
             e.target.classList.add("dragging");
-            e.dataTransfer.effectAllowed = "move";
         }
 
         function dragEnd(e) {
             e.target.classList.remove("dragging");
+            saveItinerary();
         }
 
         function dragOver(e) {
@@ -149,8 +210,11 @@
 
             if (draggedItem && list && draggedItem !== e.target) {
                 list.insertBefore(draggedItem, e.target.nextSibling);
+                saveItinerary();
             }
         }
+
+        loadItinerary();
     </script>
 
 </body>
