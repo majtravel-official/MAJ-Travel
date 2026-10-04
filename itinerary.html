@@ -42,13 +42,13 @@
         <h3 style="margin-top:30px;">Your Itinerary</h3>
 
         <h4>Day 1</h4>
-        <ul id="day1List" style="padding-left:20px;"></ul>
+        <ul id="day1List" class="sortable" style="padding-left:20px;"></ul>
 
         <h4>Day 2</h4>
-        <ul id="day2List" style="padding-left:20px;"></ul>
+        <ul id="day2List" class="sortable" style="padding-left:20px;"></ul>
 
         <h4>Day 3</h4>
-        <ul id="day3List" style="padding-left:20px;"></ul>
+        <ul id="day3List" class="sortable" style="padding-left:20px;"></ul>
 
         <a class="back-btn" href="index.html">← Back to Home</a>
     </section>
@@ -62,13 +62,38 @@
             if (input.value.trim() !== "") {
                 const li = document.createElement("li");
 
-                // Format: "09:00 — Weymouth Beach"
                 li.textContent = (time ? time + " — " : "") + input.value;
+
+                // Enable drag-and-drop
+                li.draggable = true;
+                li.addEventListener("dragstart", dragStart);
+                li.addEventListener("dragover", dragOver);
+                li.addEventListener("drop", dropItem);
 
                 document.getElementById(day + "List").appendChild(li);
 
                 input.value = "";
                 document.getElementById("timeInput").value = "";
+            }
+        }
+
+        let draggedItem = null;
+
+        function dragStart(e) {
+            draggedItem = e.target;
+            e.dataTransfer.effectAllowed = "move";
+        }
+
+        function dragOver(e) {
+            e.preventDefault();
+        }
+
+        function dropItem(e) {
+            e.preventDefault();
+            const list = e.target.parentNode;
+
+            if (draggedItem !== e.target) {
+                list.insertBefore(draggedItem, e.target.nextSibling);
             }
         }
     </script>
