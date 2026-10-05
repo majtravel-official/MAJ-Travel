@@ -55,3 +55,6 @@ function updateDayRoute(day, locations) {
 }
 
 window.addEventListener("load", initMap);
+<script src="travel-time.js"></script>
+<script src="maps.js"></script>
+<script src="script.js"></script>
