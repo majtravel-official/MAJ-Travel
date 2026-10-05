@@ -4,166 +4,124 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Itinerary Builder – MAJ Travel</title>
-    <link rel="stylesheet" href="style.css">
- 
+
     <style>
-        ul {
-            min-height: 40px;
-            padding: 10px;
-            border-radius: 5px;
-            background: #fafafa;
-            transition: background 0.2s;
+        body {
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            padding: 20px;
         }
 
-        ul.highlight {
-            background: #fff3c4;
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .day-container {
+            margin-bottom: 25px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
         }
 
         li {
-            padding: 8px;
-            margin: 4px 0;
-            background: #f7f7f7;
+            background: #fafafa;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid #d4af37;
+            border-radius: 4px;
+        }
+
+        .notes-box {
+            width: 100%;
+            margin-top: 5px;
+            padding: 6px;
+            font-size: 14px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            resize: vertical;
+        }
+
+        .highlight {
+            background: #fff8e1;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #d4af37;
+            border: none;
+            color: white;
             border-radius: 5px;
-            cursor: grab;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        li:active {
-            cursor: grabbing;
-        }
-
-        .drag-handle {
-            font-weight: bold;
-            cursor: grab;
-            user-select: none;
-        }
-
-        li.dragging {
-            opacity: 0.5;
-            background: #e0e0e0;
-        }
-
-        .delete-btn {
-            margin-left: auto;
-            color: #b30000;
             cursor: pointer;
-            font-weight: bold;
-            padding: 4px;
+            font-size: 16px;
         }
 
-        .delete-btn:hover {
-            color: #ff0000;
+        .back-btn {
+            display: block;
+            margin-top: 15px;
+            text-align: center;
         }
     </style>
 </head>
+
 <body>
- 
-    <header class="small-hero">
-        <h2>Itinerary Builder</h2>
-        <p>Create your custom travel plan step by step.</p>
-    </header>
 
-    <section class="destination-info">
+    <h1>Itinerary Builder</h1>
 
-        <h3>Select Day</h3>
-        <select id="daySelect" style="width:100%; padding:10px; border-radius:5px; border:1px solid #ccc;">
+    <div>
+        <input id="stopInput" type="text" placeholder="Enter stop">
+        <input id="timeInput" type="time">
+        <select id="daySelect">
             <option value="day1">Day 1</option>
             <option value="day2">Day 2</option>
             <option value="day3">Day 3</option>
         </select>
+        <button onclick="addStop()">Add Stop</button>
+    </div>
 
-        <h3 style="margin-top:20px;">Select Time</h3>
-        <input id="timeInput" type="time" 
-               style="width:100%; padding:10px; border-radius:5px; border:1px solid #ccc;">
-
-        <h3 style="margin-top:20px;">Add a Stop</h3>
-        <input id="stopInput" type="text" placeholder="Enter a location or activity" 
-               style="width:100%; padding:10px; border-radius:5px; border:1px solid #ccc;">
-
-        <button onclick="addStop()" 
-                style="margin-top:10px; padding:10px 20px; background:#d4af37; border:none; color:white; border-radius:5px; cursor:pointer;">
-            Add to Itinerary
-        </button>
-
-        <h3 style="margin-top:30px;">Your Itinerary</h3>
-
-        <h4>Day 1</h4>
+    <div class="day-container">
+        <h2>Day 1</h2>
         <ul id="day1List"></ul>
+    </div>
 
-        <h4>Day 2</h4>
+    <div class="day-container">
+        <h2>Day 2</h2>
         <ul id="day2List"></ul>
+    </div>
 
-        <h4>Day 3</h4>
+    <div class="day-container">
+        <h2>Day 3</h2>
         <ul id="day3List"></ul>
+    </div>
 
-        <!-- ⭐ PRINT BUTTON ADDED HERE ⭐ -->
-        <button onclick="window.location.href='print.html'" 
-                style="margin-top:25px; padding:10px 20px; background:#d4af37; border:none; color:white; border-radius:5px; cursor:pointer; font-size:16px;">
-            View Printable Itinerary
-        </button>
-
-        <a class="back-btn" href="index.html" style="display:block; margin-top:15px;">← Back to Home</a>
-    </section>
+    <button onclick="window.location.href='print.html'">View Printable Itinerary</button>
+    <a class="back-btn" href="index.html">← Back to Home</a>
 
     <script>
-        function saveItinerary() {
-            const data = {
-                day1: getListData("day1List"),
-                day2: getListData("day2List"),
-                day3: getListData("day3List")
-            };
-            localStorage.setItem("itineraryData", JSON.stringify(data));
-        }
-
-        function getListData(listId) {
-            const items = document.querySelectorAll(`#${listId} li`);
-            return Array.from(items).map(li => {
-                return {
-                    text: li.querySelector("span:nth-child(2)").textContent
-                };
-            });
-        }
-
-        function loadItinerary() {
-            const saved = localStorage.getItem("itineraryData");
-            if (!saved) return;
-
-            const data = JSON.parse(saved);
-
-            ["day1", "day2", "day3"].forEach(day => {
-                const list = document.getElementById(day + "List");
-                list.innerHTML = "";
-                data[day].forEach(item => addLoadedStop(day, item.text));
-            });
-        }
-
-        function addLoadedStop(day, text) {
-            const li = createListItem(text);
-            document.getElementById(day + "List").appendChild(li);
-        }
-
-        function createListItem(text) {
+        function createListItem(text, notes = "") {
             const li = document.createElement("li");
-
-            const handle = document.createElement("span");
-            handle.className = "drag-handle";
-            handle.textContent = "⋮⋮";
-
-            const textSpan = document.createElement("span");
-            textSpan.textContent = text;
-
-            const del = document.createElement("span");
-            del.className = "delete-btn";
-            del.textContent = "❌";
-            del.onclick = () => { li.remove(); saveItinerary(); };
-
-            li.appendChild(handle);
-            li.appendChild(textSpan);
-            li.appendChild(del);
-
             li.draggable = true;
+
+            const mainText = document.createElement("div");
+            mainText.textContent = text;
+            mainText.classList.add("stop-text");
+
+            const notesBox = document.createElement("textarea");
+            notesBox.placeholder = "Notes...";
+            notesBox.value = notes;
+            notesBox.classList.add("notes-box");
+
+            notesBox.addEventListener("input", saveItinerary);
+
+            li.appendChild(mainText);
+            li.appendChild(notesBox);
+
             li.addEventListener("dragstart", dragStart);
             li.addEventListener("dragend", dragEnd);
 
@@ -225,6 +183,37 @@
                 list.appendChild(draggedItem);
                 saveItinerary();
             }
+        }
+
+        function saveItinerary() {
+            const days = ["day1", "day2", "day3"];
+            const data = {};
+
+            days.forEach(day => {
+                const items = [];
+                document.querySelectorAll(`#${day}List li`).forEach(li => {
+                    items.push({
+                        text: li.querySelector(".stop-text").textContent,
+                        notes: li.querySelector(".notes-box").value
+                    });
+                });
+                data[day] = items;
+            });
+
+            localStorage.setItem("itinerary", JSON.stringify(data));
+        }
+
+        function loadItinerary() {
+            const saved = JSON.parse(localStorage.getItem("itinerary"));
+            if (!saved) return;
+
+            Object.keys(saved).forEach(day => {
+                const list = document.getElementById(day + "List");
+                saved[day].forEach(item => {
+                    const li = createListItem(item.text, item.notes);
+                    list.appendChild(li);
+                });
+            });
         }
 
         loadItinerary();
