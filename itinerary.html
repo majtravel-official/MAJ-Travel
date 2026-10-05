@@ -5,14 +5,18 @@
 <title>MAJ Travel – Build Your Itinerary</title>
 <link rel="stylesheet" href="style.css">
 
+<!-- Leaflet -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
+<!-- Routing Machine -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
 <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
 
+<!-- SortableJS -->
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 </head>
+
 <body class="planner">
 
 <header class="header">
@@ -25,6 +29,7 @@
     <a href="itinerary.html" class="tab active">Itinerary Builder</a>
 </nav>
 
+<!-- Controls -->
 <div id="controls">
     <input id="stopInput" placeholder="Enter destination">
     <select id="daySelect">
@@ -39,6 +44,7 @@
     <button onclick="addStop()">Add Stop</button>
 </div>
 
+<!-- Day Columns -->
 <div id="board">
     <div class="dayColumn"><h2>Day 1</h2><ul id="day1List" class="sortable"></ul></div>
     <div class="dayColumn"><h2>Day 2</h2><ul id="day2List" class="sortable"></ul></div>
@@ -49,22 +55,35 @@
     <div class="dayColumn"><h2>Day 7</h2><ul id="day7List" class="sortable"></ul></div>
 </div>
 
+<!-- Map -->
 <div id="map"></div>
 
+<!-- Bottom Buttons -->
 <div id="bottomButtons">
     <button onclick="downloadItinerary()">Download Itinerary</button>
     <button onclick="clearAll()">Clear All</button>
     <button onclick="resetMap()">Reset Map</button>
 </div>
 
+<!-- JS Files -->
 <script src="travel-time.js"></script>
 <script src="maps.js"></script>
 <script src="script.js"></script>
 
+<!-- FIXED DOWNLOAD FUNCTION -->
 <script>
 function downloadItinerary() {
-    const data = JSON.stringify(stops, null, 2);
-    const blob = new Blob([data], { type: "application/json" });
+    const fullData = {};
+
+    for (let d = 1; d <= 7; d++) {
+        const key = `day${d}`;
+        fullData[key] = stops[key].map(name => ({
+            name,
+            coordinates: coordinates[name] || null
+        }));
+    }
+
+    const blob = new Blob([JSON.stringify(fullData, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
