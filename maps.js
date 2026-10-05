@@ -23,7 +23,7 @@ function updateDayRoute(day, locs) {
         routeWhileDragging: false,
         draggableWaypoints: false,
         addWaypoints: false,
-        show: false   // ⭐ DO NOT SHOW IN MAP
+        show: false
     }).addTo(map);
 
     dayRoutes[day].on('routesfound', function(e) {
