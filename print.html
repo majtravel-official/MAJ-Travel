@@ -9,108 +9,105 @@
         body {
             font-family: Arial, sans-serif;
             margin: 40px;
-            background: #ffffff;
-            color: #333;
+            background: #f7f7f7;
         }
 
         h1 {
             text-align: center;
-            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .day-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+        }
+
+        .stop {
             margin-bottom: 10px;
-            color: #d4af37;
+            padding: 10px;
+            background: #fafafa;
+            border-left: 4px solid #d4af37;
         }
 
-        h2 {
-            font-size: 24px;
-            margin-top: 40px;
-            margin-bottom: 10px;
-            color: #d4af37;
-            border-left: 6px solid #d4af37;
-            padding-left: 10px;
-        }
-
-        ul {
-            list-style: none;
-            padding-left: 20px;
-            margin-top: 10px;
-        }
-
-        li {
-            font-size: 18px;
-            margin: 6px 0;
-            padding: 6px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .no-items {
+        .notes {
             font-style: italic;
-            color: #777;
-            margin-left: 20px;
+            margin-top: 5px;
+            color: #555;
         }
 
-        .print-btn {
-            display: block;
-            margin: 20px auto;
+        #pdfBtn {
             padding: 10px 20px;
             background: #d4af37;
-            color: white;
             border: none;
+            color: white;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 18px;
-        }
-
-        @media print {
-            .print-btn {
-                display: none;
-            }
+            font-size: 16px;
+            display: block;
+            margin: 0 auto 25px auto;
         }
     </style>
+
+    <!-- PDF Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
+
 <body>
 
-    <h1>MAJ Travel – Your Itinerary</h1>
+    <h1>Printable Itinerary</h1>
 
-    <button class="print-btn" onclick="window.print()">Print / Save as PDF</button>
+    <button id="pdfBtn">Download PDF</button>
 
-    <div id="content"></div>
+    <div id="printArea"></div>
 
     <script>
-        function loadItinerary() {
-            const saved = localStorage.getItem("itineraryData");
-            const container = document.getElementById("content");
+        function loadPrintData() {
+            const saved = JSON.parse(localStorage.getItem("itinerary"));
+            if (!saved) return;
 
-            if (!saved) {
-                container.innerHTML = "<p>No itinerary found.</p>";
-                return;
-            }
+            const container = document.getElementById("printArea");
 
-            const data = JSON.parse(saved);
+            Object.keys(saved).forEach(day => {
+                const section = document.createElement("div");
+                section.classList.add("day-section");
 
-            ["day1", "day2", "day3"].forEach((day, index) => {
-                const dayTitle = document.createElement("h2");
-                dayTitle.textContent = "Day " + (index + 1);
-                container.appendChild(dayTitle);
+                const title = document.createElement("h2");
+                title.textContent = day.toUpperCase().replace("DAY", "Day ");
+                section.appendChild(title);
 
-                const list = document.createElement("ul");
+                saved[day].forEach(item => {
+                    const stopDiv = document.createElement("div");
+                    stopDiv.classList.add("stop");
 
-                if (data[day].length === 0) {
-                    const empty = document.createElement("p");
-                    empty.className = "no-items";
-                    empty.textContent = "No stops added.";
-                    container.appendChild(empty);
-                } else {
-                    data[day].forEach(item => {
-                        const li = document.createElement("li");
-                        li.textContent = item.text;
-                        list.appendChild(li);
-                    });
-                    container.appendChild(list);
-                }
+                    stopDiv.innerHTML = `
+                        <strong>${item.text}</strong>
+                        ${item.notes ? `<div class="notes">${item.notes}</div>` : ""}
+                    `;
+
+                    section.appendChild(stopDiv);
+                });
+
+                container.appendChild(section);
             });
         }
 
-        loadItinerary();
+        document.getElementById("pdfBtn").addEventListener("click", () => {
+            const element = document.getElementById("printArea");
+
+            const options = {
+                margin: 10,
+                filename: 'MAJ-Travel-Itinerary.pdf',
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(options).from(element).save();
+        });
+
+        loadPrintData();
     </script>
 
 </body>
