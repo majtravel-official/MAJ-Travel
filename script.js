@@ -60,12 +60,14 @@ document.querySelectorAll(".sortable").forEach(list => {
         group: "days",
         animation: 150,
         onEnd: function () {
-            setTimeout(rebuildFromUI, 300);
+            rebuildFromUI();
         }
     });
 });
 
 function rebuildFromUI() {
+    let rebuildQueue = [];
+
     for (let d = 1; d <= 7; d++) {
         const key = `day${d}`;
         stops[key] = [];
@@ -74,20 +76,31 @@ function rebuildFromUI() {
         const items = document.querySelectorAll(`#${key}List li`);
         items.forEach(li => {
             const name = li.querySelector("span").innerText;
-
             stops[key].push({ name });
 
-            getCoordinates(name, coords => {
-                if (!coords) return;
-
-                coordinates[key].push({
-                    lat: coords.lat,
-                    lng: coords.lng,
-                    name
-                });
-
-                updateDayRoute(key, coordinates[key]);
-            });
+            rebuildQueue.push({ day: key, name });
         });
     }
+
+    processQueue(rebuildQueue);
+}
+
+function processQueue(queue) {
+    if (queue.length === 0) return;
+
+    const item = queue.shift();
+
+    getCoordinates(item.name, coords => {
+        if (coords) {
+            coordinates[item.day].push({
+                lat: coords.lat,
+                lng: coords.lng,
+                name: item.name
+            });
+        }
+
+        updateDayRoute(item.day, coordinates[item.day]);
+
+        processQueue(queue);
+    });
 }
