@@ -1,14 +1,90 @@
 body {
     font-family: Arial, sans-serif;
     margin: 0;
-    background: #f5f5f5;
 }
 
-h1 {
+/* Backgrounds */
+body.home {
+    background: linear-gradient(135deg, #004b8d, #00a0b0);
+    color: #fff;
+}
+
+body.planner {
+    background: #f5f5f5;
+    color: #222;
+}
+
+/* Header */
+.header {
     text-align: center;
     padding: 20px;
 }
 
+.tagline {
+    margin-top: 5px;
+    font-size: 0.95rem;
+    opacity: 0.9;
+}
+
+/* Tabs / navigation */
+.nav-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.tab {
+    padding: 10px 20px;
+    border-radius: 20px;
+    text-decoration: none;
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.4);
+    font-weight: 600;
+}
+
+body.planner .tab {
+    background: #e9ecef;
+    color: #333;
+    border-color: #ccc;
+}
+
+.tab.active {
+    background: #ffc107;
+    color: #222;
+}
+
+/* Home layout */
+.home-main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+}
+
+.card {
+    background: rgba(255,255,255,0.9);
+    color: #222;
+    border-radius: 12px;
+    padding: 20px;
+    max-width: 400px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+}
+
+.primary-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 20px;
+    border-radius: 20px;
+    background: #ffc107;
+    color: #222;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* Planner controls */
 #controls {
     text-align: center;
     padding: 10px;
@@ -51,6 +127,7 @@ h1 {
     font-size: 12px;
 }
 
+/* Map */
 #map {
     height: 500px;
     margin: 20px;
@@ -58,6 +135,7 @@ h1 {
     background: #ddd;
 }
 
+/* Bottom buttons */
 #bottomButtons {
     text-align: center;
     margin: 20px;
@@ -75,4 +153,12 @@ h1 {
 
 #bottomButtons button:hover {
     background: #0056b3;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 10px;
+    font-size: 0.85rem;
+    opacity: 0.8;
 }
