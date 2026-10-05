@@ -44,11 +44,24 @@ body {
     background: #eee;
     margin-bottom: 6px;
     border-radius: 4px;
+    cursor: grab;
+}
+
+#board li:active {
+    cursor: grabbing;
 }
 
 .drag-hint {
     opacity: 0.6;
-    font-size: 12px;
+    font-size: 14px;
+}
+
+.dragging {
+    opacity: 0.4;
+}
+
+.ghost {
+    background: #ccc;
 }
 
 .delete-btn {
