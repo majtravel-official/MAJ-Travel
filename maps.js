@@ -1,92 +1,28 @@
-/* ============================================================
-   MAJ TRAVEL — GOOGLE MAPS ROUTE PREVIEW ENGINE
-   MODULE 4
-============================================================ */
-
 let map;
-let directionsService;
-let directionsRenderer;
+let routeControl;
 
-/* ------------------------------------------------------------
-   INITIALISE GOOGLE MAPS
------------------------------------------------------------- */
+// Initialise FREE Leaflet Map
 function initMap() {
-    map = new google.maps.Map(document.getElementById("map"), {
-        zoom: 7,
-        center: { lat: 53.4808, lng: -2.2426 } // Manchester default
-    });
+    map = L.map('map').setView([53.4808, -2.2426], 7); // Default: Manchester
 
-    directionsService = new google.maps.DirectionsService();
-    directionsRenderer = new google.maps.DirectionsRenderer({
-        map: map,
-        suppressMarkers: false,
-        preserveViewport: false
-    });
-
-    updateRoutePreview();
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap'
+    }).addTo(map);
 }
 
-/* ------------------------------------------------------------
-   GET ALL STOPS FROM LOCAL STORAGE
------------------------------------------------------------- */
-function getAllStops() {
-    const saved = JSON.parse(localStorage.getItem("itinerary"));
-    if (!saved) return [];
-
-    const allStops = [];
-
-    Object.keys(saved).forEach(day => {
-        saved[day].forEach(stop => {
-            if (stop.text && stop.text.trim() !== "") {
-                allStops.push(stop.text);
-            }
-        });
-    });
-
-    return allStops;
-}
-
-/* ------------------------------------------------------------
-   UPDATE ROUTE PREVIEW ON MAP
------------------------------------------------------------- */
-function updateRoutePreview() {
-    const stops = getAllStops();
-
-    if (stops.length < 2) {
-        directionsRenderer.setDirections({ routes: [] });
-        return;
+// Draw route using Leaflet Routing Machine
+function updateRoute(locations) {
+    if (routeControl) {
+        map.removeControl(routeControl);
     }
 
-    const origin = stops[0];
-    const destination = stops[stops.length - 1];
+    if (locations.length < 2) return;
 
-    const waypoints = stops.slice(1, -1).map(stop => ({
-        location: stop,
-        stopover: true
-    }));
-
-    const request = {
-        origin: origin,
-        destination: destination,
-        waypoints: waypoints,
-        travelMode: google.maps.TravelMode.DRIVING
-    };
-
-    directionsService.route(request, (result, status) => {
-        if (status === "OK") {
-            directionsRenderer.setDirections(result);
-        }
-    });
+    routeControl = L.Routing.control({
+        waypoints: locations.map(loc => L.latLng(loc.lat, loc.lng)),
+        routeWhileDragging: false,
+        showAlternatives: false,
+        addWaypoints: false
+    }).addTo(map);
 }
-
-/* ------------------------------------------------------------
-   UPDATE MAP WHEN ITINERARY CHANGES
------------------------------------------------------------- */
-window.addEventListener("storage", () => {
-    updateRoutePreview();
-});
-
-/* ------------------------------------------------------------
-   EXPOSE INIT FUNCTION FOR GOOGLE API CALLBACK
------------------------------------------------------------- */
-window.initMap = initMap;
