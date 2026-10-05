@@ -50,11 +50,20 @@ function updateDayRoute(day, locs) {
         const index = dayOrder.indexOf(day);
         const existingBoxes = Array.from(container.querySelectorAll(".directionBox"));
 
-        // insert box in correct Day 1–7 order
-        if (index >= existingBoxes.length) {
+        // insert box in true Day 1–7 order
+        let inserted = false;
+        for (const b of existingBoxes) {
+            const bDay = b.id.replace("dir-", "");
+            const bIndex = dayOrder.indexOf(bDay);
+            if (bIndex > index) {
+                container.insertBefore(box, b);
+                inserted = true;
+                break;
+            }
+        }
+
+        if (!inserted) {
             container.appendChild(box);
-        } else {
-            container.insertBefore(box, existingBoxes[index]);
         }
     });
 }
