@@ -1,13 +1,6 @@
 /* ============================================================
    MAJ TRAVEL — FULL 7‑DAY ITINERARY BUILDER ENGINE
-   Supports:
-   ✔ Drag & Drop (cross‑day)
-   ✔ Notes per stop
-   ✔ Photo support (Module 4)
-   ✔ Travel‑time hooks (Module 5)
-   ✔ Google Maps hooks (Module 6)
-   ✔ LocalStorage saving
-   ✔ 7‑day itinerary
+   MODULE 4: PHOTO SYSTEM ENABLED
 ============================================================ */
 
 const DAYS = ["day1","day2","day3","day4","day5","day6","day7"];
@@ -18,7 +11,7 @@ const DAYS = ["day1","day2","day3","day4","day5","day6","day7"];
 function createListItem(text, notes = "", photo = "") {
     const li = document.createElement("li");
     li.draggable = true;
- 
+
     // Main stop text
     const mainText = document.createElement("div");
     mainText.textContent = text;
@@ -31,21 +24,19 @@ function createListItem(text, notes = "", photo = "") {
     notesBox.classList.add("notes-box");
     notesBox.addEventListener("input", saveItinerary);
 
-    // Photo URL input (Module 4 will activate this)
+    // Photo URL input
     const photoInput = document.createElement("input");
     photoInput.type = "text";
     photoInput.placeholder = "Photo URL";
     photoInput.value = photo;
     photoInput.classList.add("photo-box");
-    photoInput.addEventListener("input", saveItinerary);
+    photoInput.addEventListener("input", () => {
+        updatePhotoPreview(li, photoInput.value);
+        saveItinerary();
+    });
 
     // Photo preview
-    if (photo) {
-        const img = document.createElement("img");
-        img.src = photo;
-        img.classList.add("stop-photo");
-        li.appendChild(img);
-    }
+    updatePhotoPreview(li, photo);
 
     li.appendChild(mainText);
     li.appendChild(notesBox);
@@ -56,6 +47,22 @@ function createListItem(text, notes = "", photo = "") {
     li.addEventListener("dragend", dragEnd);
 
     return li;
+}
+
+/* ------------------------------------------------------------
+   UPDATE PHOTO PREVIEW
+------------------------------------------------------------ */
+function updatePhotoPreview(li, url) {
+    // Remove old preview
+    const oldImg = li.querySelector(".stop-photo");
+    if (oldImg) oldImg.remove();
+
+    if (url && url.trim() !== "") {
+        const img = document.createElement("img");
+        img.src = url;
+        img.classList.add("stop-photo");
+        li.appendChild(img);
+    }
 }
 
 /* ------------------------------------------------------------
