@@ -1,8 +1,23 @@
-// Store stops and coordinates
-let stops = [];
-let stopCoordinates = [];
+let stops = {
+    day1: [],
+    day2: [],
+    day3: [],
+    day4: [],
+    day5: [],
+    day6: [],
+    day7: []
+};
 
-// Add stop to itinerary
+let coordinates = {
+    day1: [],
+    day2: [],
+    day3: [],
+    day4: [],
+    day5: [],
+    day6: [],
+    day7: []
+};
+
 function addStop() {
     const stopName = document.getElementById("stopInput").value;
     const stopTime = document.getElementById("timeInput").value;
@@ -10,59 +25,51 @@ function addStop() {
 
     if (!stopName) return alert("Please enter a stop name.");
 
-    // Add stop to the correct day list
+    // Add stop to UI list
     const list = document.getElementById(day + "List");
     const li = document.createElement("li");
     li.textContent = `${stopTime} - ${stopName}`;
     list.appendChild(li);
 
     // Store stop
-    stops.push({ name: stopName, time: stopTime });
+    stops[day].push({ name: stopName, time: stopTime });
 
-    // Get coordinates using travel-time.js
+    // Get coordinates
     getCoordinates(stopName, function(coords) {
         if (coords) {
-            stopCoordinates.push(coords);
-            updateRoute(stopCoordinates); // Leaflet route update
+            coordinates[day].push({
+                lat: coords.lat,
+                lng: coords.lng,
+                name: stopName,
+                time: stopTime
+            });
+
+            // Update route for that day only
+            updateDayRoute(day, coordinates[day]);
         }
     });
 
-    // Clear input
+    // Clear inputs
     document.getElementById("stopInput").value = "";
     document.getElementById("timeInput").value = "";
 }
 
-// Share itinerary (simple JSON link)
-function shareItinerary() {
-    const data = JSON.stringify(stops);
-    alert("Copy this itinerary data:\n\n" + data);
-}
-
-// Download itinerary JSON
-function downloadJSON() {
-    const data = JSON.stringify(stops, null, 2);
-    const blob = new Blob([data], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "itinerary.json";
-    a.click();
-}
-
-// Clear everything
 function clearAll() {
-    stops = [];
-    stopCoordinates = [];
-
-    // Clear lists
-    for (let i = 1; i <= 7; i++) {
-        document.getElementById(`day${i}List`).innerHTML = "";
+    for (let d = 1; d <= 7; d++) {
+        const dayKey = `day${d}`;
+        stops[dayKey] = [];
+        coordinates[dayKey] = [];
+        document.getElementById(`day${d}List`).innerHTML = "";
     }
 
-    // Clear route
-    if (routeControl) {
-        map.removeControl(routeControl);
-        routeControl = null;
+    // Remove all routes and markers
+    for (let day in dayRoutes) {
+        map.removeControl(dayRoutes[day]);
     }
+    dayRoutes = {};
+
+    for (let day in dayMarkers) {
+        dayMarkers[day].forEach(m => map.removeLayer(m));
+    }
+    dayMarkers = {};
 }
