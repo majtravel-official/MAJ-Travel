@@ -11,7 +11,7 @@ let coordinates = {
 function addStop() {
     const name = document.getElementById("stopInput").value.trim();
     const day = document.getElementById("daySelect").value;
-
+ 
     if (!name) return alert("Enter a destination");
 
     const li = document.createElement("li");
