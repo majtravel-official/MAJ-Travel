@@ -197,3 +197,12 @@ function downloadJSON() {
 
     URL.revokeObjectURL(url);
 }
+/* ============================================================
+   CLEAR ALL ITINERARY DATA
+============================================================ */
+function clearAll() {
+    if (!confirm("Are you sure you want to clear the entire itinerary?")) return;
+
+    localStorage.removeItem("itinerary");
+    location.reload();
+}
