@@ -4,7 +4,7 @@
 function createListItem(text, notes = "") {
     const li = document.createElement("li");
     li.draggable = true;
-
+ 
     const mainText = document.createElement("div");
     mainText.textContent = text;
     mainText.classList.add("stop-text");
