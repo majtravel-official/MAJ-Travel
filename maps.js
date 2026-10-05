@@ -24,12 +24,10 @@ function initMap() {
 function updateDayRoute(day, locations) {
     if (!map) return;
 
-    // remove old route
     if (dayRoutes[day]) {
         map.removeControl(dayRoutes[day]);
     }
 
-    // remove old markers
     if (dayMarkers[day]) {
         dayMarkers[day].forEach(m => map.removeLayer(m));
     }
