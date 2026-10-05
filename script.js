@@ -169,3 +169,16 @@ function loadItinerary() {
    INITIALISE
 ------------------------------------------------------------ */
 loadItinerary();
+/* ============================================================
+   SHARE ITINERARY LINK
+============================================================ */
+function shareItinerary() {
+    const data = localStorage.getItem("itinerary");
+    const encoded = encodeURIComponent(data);
+
+    const shareURL = `${window.location.origin}${window.location.pathname}?itinerary=${encoded}`;
+
+    navigator.clipboard.writeText(shareURL);
+
+    alert("Share link copied to clipboard!");
+}
