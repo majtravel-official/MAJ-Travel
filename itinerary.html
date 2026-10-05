@@ -48,11 +48,10 @@
 <div id="map"></div>
 
 <!-- Bottom buttons -->
-<div style="text-align:center; margin:20px;">
-    <button onclick="downloadItinerary()">Download Itinerary JSON</button>
-    <button onclick="shareItinerary()">Share Itinerary</button>
+<div id="bottomButtons">
+    <button onclick="downloadItinerary()">Download Itinerary</button>
     <button onclick="clearAll()">Clear All</button>
-    <button onclick="map.setView([53.48, -2.24], 6)">Reset Map</button>
+    <button onclick="resetMap()">Reset Map</button>
 </div>
 
 <script src="travel-time.js"></script>
@@ -70,8 +69,8 @@ function downloadItinerary() {
     a.click();
 }
 
-function shareItinerary() {
-    alert("Sharing coming soon!");
+function resetMap() {
+    map.setView([53.48, -2.24], 6);
 }
 </script>
 
