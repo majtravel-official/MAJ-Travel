@@ -1,33 +1,66 @@
-// -----------------------------
-// Create a stop list item
-// -----------------------------
-function createListItem(text, notes = "") {
+/* ============================================================
+   MAJ TRAVEL — FULL 7‑DAY ITINERARY BUILDER ENGINE
+   Supports:
+   ✔ Drag & Drop (cross‑day)
+   ✔ Notes per stop
+   ✔ Photo support (Module 4)
+   ✔ Travel‑time hooks (Module 5)
+   ✔ Google Maps hooks (Module 6)
+   ✔ LocalStorage saving
+   ✔ 7‑day itinerary
+============================================================ */
+
+const DAYS = ["day1","day2","day3","day4","day5","day6","day7"];
+
+/* ------------------------------------------------------------
+   CREATE LIST ITEM (Stop)
+------------------------------------------------------------ */
+function createListItem(text, notes = "", photo = "") {
     const li = document.createElement("li");
     li.draggable = true;
- 
+
+    // Main stop text
     const mainText = document.createElement("div");
     mainText.textContent = text;
     mainText.classList.add("stop-text");
 
+    // Notes box
     const notesBox = document.createElement("textarea");
     notesBox.placeholder = "Notes...";
     notesBox.value = notes;
     notesBox.classList.add("notes-box");
-
     notesBox.addEventListener("input", saveItinerary);
+
+    // Photo URL input (Module 4 will activate this)
+    const photoInput = document.createElement("input");
+    photoInput.type = "text";
+    photoInput.placeholder = "Photo URL";
+    photoInput.value = photo;
+    photoInput.classList.add("photo-box");
+    photoInput.addEventListener("input", saveItinerary);
+
+    // Photo preview
+    if (photo) {
+        const img = document.createElement("img");
+        img.src = photo;
+        img.classList.add("stop-photo");
+        li.appendChild(img);
+    }
 
     li.appendChild(mainText);
     li.appendChild(notesBox);
+    li.appendChild(photoInput);
 
+    // Drag events
     li.addEventListener("dragstart", dragStart);
     li.addEventListener("dragend", dragEnd);
 
     return li;
 }
 
-// -----------------------------
-// Add a stop to a selected day
-// -----------------------------
+/* ------------------------------------------------------------
+   ADD STOP
+------------------------------------------------------------ */
 function addStop() {
     const input = document.getElementById("stopInput");
     const time = document.getElementById("timeInput").value;
@@ -46,16 +79,15 @@ function addStop() {
     }
 }
 
-// -----------------------------
-// Drag & Drop Logic
-// -----------------------------
+/* ------------------------------------------------------------
+   DRAG & DROP (Cross‑Day)
+------------------------------------------------------------ */
 let draggedItem = null;
 
 function dragStart(e) {
     draggedItem = e.target;
     e.target.classList.add("dragging");
 
-    // Enable dragover and drop on ALL day lists
     document.querySelectorAll("ul").forEach(list => {
         list.addEventListener("dragover", dragOver);
         list.addEventListener("drop", dropItem);
@@ -66,7 +98,6 @@ function dragStart(e) {
 function dragEnd(e) {
     e.target.classList.remove("dragging");
 
-    // Remove listeners from all lists
     document.querySelectorAll("ul").forEach(list => {
         list.removeEventListener("dragover", dragOver);
         list.removeEventListener("drop", dropItem);
@@ -90,19 +121,19 @@ function dropItem(e) {
     }
 }
 
-// -----------------------------
-// Save itinerary to localStorage
-// -----------------------------
+/* ------------------------------------------------------------
+   SAVE ITINERARY (LocalStorage)
+------------------------------------------------------------ */
 function saveItinerary() {
-    const days = ["day1", "day2", "day3"];
     const data = {};
 
-    days.forEach(day => {
+    DAYS.forEach(day => {
         const items = [];
         document.querySelectorAll(`#${day}List li`).forEach(li => {
             items.push({
                 text: li.querySelector(".stop-text").textContent,
-                notes: li.querySelector(".notes-box").value
+                notes: li.querySelector(".notes-box").value,
+                photo: li.querySelector(".photo-box").value
             });
         });
         data[day] = items;
@@ -111,23 +142,23 @@ function saveItinerary() {
     localStorage.setItem("itinerary", JSON.stringify(data));
 }
 
-// -----------------------------
-// Load itinerary from localStorage
-// -----------------------------
+/* ------------------------------------------------------------
+   LOAD ITINERARY
+------------------------------------------------------------ */
 function loadItinerary() {
     const saved = JSON.parse(localStorage.getItem("itinerary"));
     if (!saved) return;
 
-    Object.keys(saved).forEach(day => {
+    DAYS.forEach(day => {
         const list = document.getElementById(day + "List");
         saved[day].forEach(item => {
-            const li = createListItem(item.text, item.notes);
+            const li = createListItem(item.text, item.notes, item.photo);
             list.appendChild(li);
         });
     });
 }
 
-// -----------------------------
-// Initialise
-// -----------------------------
+/* ------------------------------------------------------------
+   INITIALISE
+------------------------------------------------------------ */
 loadItinerary();
