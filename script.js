@@ -182,3 +182,18 @@ function shareItinerary() {
 
     alert("Share link copied to clipboard!");
 }
+/* ============================================================
+   DOWNLOAD ITINERARY.JSON
+============================================================ */
+function downloadJSON() {
+    const data = localStorage.getItem("itinerary");
+    const blob = new Blob([data], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "itinerary.json";
+    a.click();
+
+    URL.revokeObjectURL(url);
+}
