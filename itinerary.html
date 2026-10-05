@@ -1,121 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MAJ Travel – Build Your Itinerary</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>MAJ Travel – Build Your Itinerary</title>
+<link rel="stylesheet" href="style.css">
 
-    <!-- Leaflet (FREE MAPS) -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<!-- Leaflet -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
-    <!-- Leaflet Routing Machine (FREE ROUTE PREVIEW) -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
-    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+<!-- Leaflet Routing Machine -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+<script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
 
-    <style>
-        #map {
-            height: 400px;
-            width: 100%;
-            margin-top: 20px;
-            border-radius: 10px;
-        }
-    </style>
+<!-- SortableJS (drag & drop) -->
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+
 </head>
-
 <body>
 
-    <!-- HEADER -->
-    <header>
-        <h1>MAJ Travel – Itinerary Builder</h1>
-    </header>
+<h1>MAJ Travel – Build Your Itinerary</h1>
 
-    <!-- NAVIGATION -->
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="itinerary.html">Build Itinerary</a>
-        <a href="print.html">Print</a>
-        <a href="about.html">About</a>
-    </nav>
+<div id="controls">
+    <input id="stopInput" placeholder="Enter destination">
+    <input id="timeInput" placeholder="Time (e.g., 09:00)">
+    <select id="daySelect">
+        <option value="day1">Day 1</option>
+        <option value="day2">Day 2</option>
+        <option value="day3">Day 3</option>
+        <option value="day4">Day 4</option>
+        <option value="day5">Day 5</option>
+        <option value="day6">Day 6</option>
+        <option value="day7">Day 7</option>
+    </select>
+    <button onclick="addStop()">Add Stop</button>
+    <button onclick="clearAll()">Clear All</button>
+</div>
 
-    <!-- MAIN CONTENT -->
-    <div class="main-card">
-        <h2>Build Your 7‑Day Itinerary</h2>
+<div id="board">
+    <div class="dayColumn" id="day1Column"><h2>Day 1</h2><ul id="day1List" class="sortable"></ul></div>
+    <div class="dayColumn" id="day2Column"><h2>Day 2</h2><ul id="day2List" class="sortable"></ul></div>
+    <div class="dayColumn" id="day3Column"><h2>Day 3</h2><ul id="day3List" class="sortable"></ul></div>
+    <div class="dayColumn" id="day4Column"><h2>Day 4</h2><ul id="day4List" class="sortable"></ul></div>
+    <div class="dayColumn" id="day5Column"><h2>Day 5</h2><ul id="day5List" class="sortable"></ul></div>
+    <div class="dayColumn" id="day6Column"><h2>Day 6</h2><ul id="day6List" class="sortable"></ul></div>
+    <div class="dayColumn" id="day7Column"><h2>Day 7</h2><ul id="day7List" class="sortable"></ul></div>
+</div>
 
-        <div>
-            <input id="stopInput" type="text" placeholder="Enter stop name">
-            <input id="timeInput" type="time">
-            <select id="daySelect">
-                <option value="day1">Day 1</option>
-                <option value="day2">Day 2</option>
-                <option value="day3">Day 3</option>
-                <option value="day4">Day 4</option>
-                <option value="day5">Day 5</option>
-                <option value="day6">Day 6</option>
-                <option value="day7">Day 7</option>
-            </select>
-            <button onclick="addStop()">Add Stop</button>
-        </div>
+<div id="map"></div>
 
-        <div class="day-container"><h2>Day 1</h2><ul id="day1List"></ul></div>
-        <div class="day-container"><h2>Day 2</h2><ul id="day2List"></ul></div>
-        <div class="day-container"><h2>Day 3</h2><ul id="day3List"></ul></div>
-        <div class="day-container"><h2>Day 4</h2><ul id="day4List"></ul></div>
-        <div class="day-container"><h2>Day 5</h2><ul id="day5List"></ul></div>
-        <div class="day-container"><h2>Day 6</h2><ul id="day6List"></ul></div>
-        <div class="day-container"><h2>Day 7</h2><ul id="day7List"></ul></div>
-
-        <h2>Route Preview</h2>
-        <div id="map"></div>
-
-        <button onclick="shareItinerary()">Share Itinerary</button>
-        <button onclick="downloadJSON()">Download JSON</button>
-        <button onclick="clearAll()">Clear All</button>
-    </div>
-
-    <!-- FOOTER -->
-    <footer>
-        <p>© MAJ Travel – Coach-Friendly Itinerary Builder</p>
-    </footer>
-
-    <!-- SCRIPTS -->
-    <script src="script.js"></script>
-    <script src="travel-time.js"></script>
-
-    <script>
-        let map;
-        let routeControl;
-
-        // Initialise FREE Leaflet Map
-        function initMap() {
-            map = L.map('map').setView([53.4808, -2.2426], 7); // Default: Manchester
-
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                maxZoom: 19,
-                attribution: '© OpenStreetMap'
-            }).addTo(map);
-        }
-
-        // Draw route using Leaflet Routing Machine
-        function updateRoute(locations) {
-            if (routeControl) {
-                map.removeControl(routeControl);
-            }
-
-            if (locations.length < 2) return;
-
-            routeControl = L.Routing.control({
-                waypoints: locations.map(loc => L.latLng(loc.lat, loc.lng)),
-                routeWhileDragging: false,
-                showAlternatives: false,
-                addWaypoints: false
-            }).addTo(map);
-        }
-
-        // Start map when page loads
-        window.onload = initMap;
-    </script>
+<script src="travel-time.js"></script>
+<script src="maps.js"></script>
+<script src="script.js"></script>
 
 </body>
 </html>
