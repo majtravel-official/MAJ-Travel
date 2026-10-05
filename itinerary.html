@@ -1,44 +1,51 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Itinerary Builder</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Itinerary Builder – MAJ Travel</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
- 
-<h1>Itinerary Builder</h1>
 
-<div>
-    <input id="stopInput" type="text" placeholder="Enter stop">
-    <input id="timeInput" type="time">
-    <select id="daySelect">
-        <option value="day1">Day 1</option>
-        <option value="day2">Day 2</option>
-        <option value="day3">Day 3</option>
-        <option value="day4">Day 4</option>
-        <option value="day5">Day 5</option>
-        <option value="day6">Day 6</option>
-        <option value="day7">Day 7</option>
-    </select>
-    <button onclick="addStop()">Add Stop</button>
-</div>
+    <h1>Itinerary Builder</h1>
 
-<!-- 7 DAY LISTS -->
-<div class="day-container"><h2>Day 1</h2><ul id="day1List"></ul></div>
-<div class="day-container"><h2>Day 2</h2><ul id="day2List"></ul></div>
-<div class="day-container"><h2>Day 3</h2><ul id="day3List"></ul></div>
-<div class="day-container"><h2>Day 4</h2><ul id="day4List"></ul></div>
-<div class="day-container"><h2>Day 5</h2><ul id="day5List"></ul></div>
-<div class="day-container"><h2>Day 6</h2><ul id="day6List"></ul></div>
-<div class="day-container"><h2>Day 7</h2><ul id="day7List"></ul></div>
+    <div>
+        <input id="stopInput" type="text" placeholder="Enter stop">
+        <input id="timeInput" type="time">
 
-<button onclick="window.location.href='print.html'">View Printable Itinerary</button>
+        <select id="daySelect">
+            <option value="day1">Day 1</option>
+            <option value="day2">Day 2</option>
+            <option value="day3">Day 3</option>
+            <option value="day4">Day 4</option>
+            <option value="day5">Day 5</option>
+            <option value="day6">Day 6</option>
+            <option value="day7">Day 7</option>
+        </select>
 
-<!-- GOOGLE MAP -->
-<div id="map"></div>
+        <button onclick="addStop()">Add Stop</button>
+    </div>
 
-<script src="script.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
+    <!-- 7 DAY LISTS -->
+    <div class="day-container"><h2>Day 1</h2><ul id="day1List"></ul></div>
+    <div class="day-container"><h2>Day 2</h2><ul id="day2List"></ul></div>
+    <div class="day-container"><h2>Day 3</h2><ul id="day3List"></ul></div>
+    <div class="day-container"><h2>Day 4</h2><ul id="day4List"></ul></div>
+    <div class="day-container"><h2>Day 5</h2><ul id="day5List"></ul></div>
+    <div class="day-container"><h2>Day 6</h2><ul id="day6List"></ul></div>
+    <div class="day-container"><h2>Day 7</h2><ul id="day7List"></ul></div>
+
+    <button onclick="window.location.href='print.html'">View Printable Itinerary</button>
+
+    <!-- GOOGLE MAP PREVIEW -->
+    <div id="map"></div>
+
+    <script src="script.js"></script>
+
+    <!-- Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
 
 </body>
 </html>
