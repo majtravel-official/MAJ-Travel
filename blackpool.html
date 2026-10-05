@@ -3,30 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blackpool – MAJ Travel</title>
+    <title>Itinerary Builder – MAJ Travel</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-    <header class="hero small-hero">
-        <h2>Blackpool</h2>
-        <p>Classic seaside fun and iconic attractions.</p>
-    </header>
+    <h1>Itinerary Builder</h1>
 
-    <section class="destination-info">
-        <h3>Things to Do</h3>
-        <ul>
-            <li>Blackpool Tower</li>
-            <li>Central Pier</li>
-            <li>Sea Life Centre</li>
-            <li>Promenade Walk</li>
-        </ul>
+    <div>
+        <input id="stopInput" type="text" placeholder="Enter stop">
+        <input id="timeInput" type="time">
+ 
+        <select id="daySelect">
+            <option value="day1">Day 1</option>
+            <option value="day2">Day 2</option>
+            <option value="day3">Day 3</option>
+            <option value="day4">Day 4</option>
+            <option value="day5">Day 5</option>
+            <option value="day6">Day 6</option>
+            <option value="day7">Day 7</option>
+        </select>
 
-        <h3>Coach-Friendly Notes</h3>
-        <p>Coach parking available near the Tower. Easy access for groups.</p>
+        <button onclick="addStop()">Add Stop</button>
+    </div>
 
-        <a class="back-btn" href="index.html">← Back to Home</a>
-    </section>
+    <!-- 7 DAY LISTS -->
+    <div class="day-container"><h2>Day 1</h2><ul id="day1List"></ul></div>
+    <div class="day-container"><h2>Day 2</h2><ul id="day2List"></ul></div>
+    <div class="day-container"><h2>Day 3</h2><ul id="day3List"></ul></div>
+    <div class="day-container"><h2>Day 4</h2><ul id="day4List"></ul></div>
+    <div class="day-container"><h2>Day 5</h2><ul id="day5List"></ul></div>
+    <div class="day-container"><h2>Day 6</h2><ul id="day6List"></ul></div>
+    <div class="day-container"><h2>Day 7</h2><ul id="day7List"></ul></div>
+
+    <!-- PRINT VIEW BUTTON -->
+    <button onclick="window.location.href='print.html'">View Printable Itinerary</button>
+
+    <!-- NEW FEATURE BUTTONS -->
+    <button onclick="shareItinerary()">Share Itinerary</button>
+    <button onclick="downloadJSON()">Download JSON</button>
+    <button onclick="clearAll()">Clear All</button>
+
+    <!-- GOOGLE MAP PREVIEW -->
+    <div id="map"></div>
+
+    <!-- CORE SCRIPTS -->
+    <script src="script.js"></script>
+    <script src="travel-time.js"></script>
+    <script src="maps.js"></script>
+
+    <!-- GOOGLE MAPS API (corrected with callback) -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initMap"></script>
 
 </body>
 </html>
