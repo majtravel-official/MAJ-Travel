@@ -21,6 +21,7 @@
 
 <h1>MAJ Travel – Build Your Itinerary</h1>
 
+<!-- Controls -->
 <div id="controls">
     <input id="stopInput" placeholder="Enter destination">
     <select id="daySelect">
@@ -36,6 +37,7 @@
     <button onclick="clearAll()">Clear All</button>
 </div>
 
+<!-- Trello-style board -->
 <div id="board">
     <div class="dayColumn"><h2>Day 1</h2><ul id="day1List" class="sortable"></ul></div>
     <div class="dayColumn"><h2>Day 2</h2><ul id="day2List" class="sortable"></ul></div>
@@ -46,8 +48,10 @@
     <div class="dayColumn"><h2>Day 7</h2><ul id="day7List" class="sortable"></ul></div>
 </div>
 
+<!-- Map -->
 <div id="map"></div>
 
+<!-- Scripts -->
 <script src="travel-time.js"></script>
 <script src="maps.js"></script>
 <script src="script.js"></script>
