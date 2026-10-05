@@ -77,7 +77,6 @@ function rebuildFromUI() {
         items.forEach(li => {
             const name = li.querySelector("span").innerText;
             stops[key].push({ name });
-
             rebuildQueue.push({ day: key, name });
         });
     }
@@ -100,7 +99,6 @@ function processQueue(queue) {
         }
 
         updateDayRoute(item.day, coordinates[item.day]);
-
         processQueue(queue);
     });
 }
