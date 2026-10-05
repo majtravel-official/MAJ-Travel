@@ -35,7 +35,8 @@ function calculateTravelTime(origin, destination) {
                 }
 
                 const result = response.rows[0].elements[0];
-                if (result.status === "ZERO_RESULTS") {
+
+                if (!result || result.status === "ZERO_RESULTS") {
                     resolve("");
                     return;
                 }
