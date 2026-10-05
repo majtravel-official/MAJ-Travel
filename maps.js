@@ -16,16 +16,20 @@ function initMap() {
     map = L.map('map').setView([53.48, -2.24], 6);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19
+        maxZoom: 19,
+        attribution: '© OpenStreetMap'
     }).addTo(map);
 }
 
 function updateDayRoute(day, locations) {
+    if (!map) return;
 
+    // remove old route
     if (dayRoutes[day]) {
         map.removeControl(dayRoutes[day]);
     }
 
+    // remove old markers
     if (dayMarkers[day]) {
         dayMarkers[day].forEach(m => map.removeLayer(m));
     }
@@ -40,7 +44,8 @@ function updateDayRoute(day, locations) {
         },
         addWaypoints: false,
         draggableWaypoints: false,
-        fitSelectedRoutes: true
+        fitSelectedRoutes: true,
+        show: false
     }).addTo(map);
 
     locations.forEach(loc => {
@@ -50,4 +55,4 @@ function updateDayRoute(day, locations) {
     });
 }
 
-initMap();
+window.addEventListener("load", initMap);
