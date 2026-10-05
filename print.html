@@ -9,12 +9,10 @@
 
 <body>
 
-    <!-- HEADER -->
     <header>
         <h1>MAJ Travel – Printable Itinerary</h1>
     </header>
 
-    <!-- NAVIGATION -->
     <nav>
         <a href="index.html">Home</a>
         <a href="itinerary.html">Build Itinerary</a>
@@ -22,32 +20,23 @@
         <a href="about.html">About</a>
     </nav>
 
-    <!-- MAIN PRINT AREA -->
     <div class="main-card">
         <h2>Your Itinerary (Print Version)</h2>
 
-        <p>
-            This page shows a clean, text‑only version of your itinerary.  
-            Use the button below to download a PDF.
-        </p>
+        <p>This page shows a clean, text‑only version of your itinerary. Use the button below to download a PDF.</p>
 
         <button id="pdfBtn">Download PDF</button>
 
         <hr>
 
-        <!-- Where print.js will inject the itinerary -->
         <div id="printArea"></div>
     </div>
 
-    <!-- FOOTER -->
     <footer>
         <p>© MAJ Travel – Coach-Friendly Itinerary Builder</p>
     </footer>
 
-    <!-- SCRIPTS -->
     <script src="print.js"></script>
-
-    <!-- HTML2PDF LIBRARY -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 </body>
