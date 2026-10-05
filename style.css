@@ -4,6 +4,13 @@ body {
     background: #f4f4f4;
 }
 
+.header {
+    background: #003366;
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
+
 #controls {
     padding: 10px;
     background: #fff;
@@ -17,7 +24,6 @@ body {
     padding: 10px;
     overflow-x: auto;
     white-space: nowrap;
-    min-height: 260px;
 }
 
 .dayColumn {
@@ -45,7 +51,6 @@ body {
     font-size: 12px;
 }
 
-/* Delete button */
 .delete-btn {
     background: #dc3545;
     color: white;
@@ -60,9 +65,16 @@ body {
     background: #b02a37;
 }
 
-/* ⭐ DIRECTIONS AREA BELOW MAP */
+#map {
+    height: 400px;
+    margin: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* ⭐ Directions BELOW the map */
 #directionsArea {
-    background: #fff;
+    background: #ffffff;
     padding: 15px;
     margin: 15px;
     border-radius: 8px;
