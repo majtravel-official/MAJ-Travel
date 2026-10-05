@@ -1,113 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Printable Itinerary – MAJ Travel</title>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            background: #f7f7f7;
-        }
- 
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .day-section {
-            margin-bottom: 30px;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-        }
-
-        .stop {
-            margin-bottom: 10px;
-            padding: 10px;
-            background: #fafafa;
-            border-left: 4px solid #d4af37;
-        }
-
-        .notes {
-            font-style: italic;
-            margin-top: 5px;
-            color: #555;
-        }
-
-        #pdfBtn {
-            padding: 10px 20px;
-            background: #d4af37;
-            border: none;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            display: block;
-            margin: 0 auto 25px auto;
-        }
-    </style>
-
+    <title>Printable Itinerary</title>
+    <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
-
 <body>
 
-    <h1>Printable Itinerary</h1>
+<h1>Printable Itinerary</h1>
 
-    <button id="pdfBtn">Download PDF</button>
+<button id="pdfBtn">Download PDF</button>
 
-    <div id="printArea"></div>
+<div id="printArea"></div>
 
-    <script>
-        function loadPrintData() {
-            const saved = JSON.parse(localStorage.getItem("itinerary"));
-            if (!saved) return;
-
-            const container = document.getElementById("printArea");
-
-            Object.keys(saved).forEach(day => {
-                const section = document.createElement("div");
-                section.classList.add("day-section");
-
-                const title = document.createElement("h2");
-                title.textContent = day.toUpperCase().replace("DAY", "Day ");
-                section.appendChild(title);
-
-                saved[day].forEach(item => {
-                    const stopDiv = document.createElement("div");
-                    stopDiv.classList.add("stop");
-
-                    stopDiv.innerHTML = `
-                        <strong>${item.text}</strong>
-                        ${item.notes ? `<div class="notes">${item.notes}</div>` : ""}
-                    `;
-
-                    section.appendChild(stopDiv);
-                });
-
-                container.appendChild(section);
-            });
-        }
-
-        document.getElementById("pdfBtn").addEventListener("click", () => {
-            const element = document.getElementById("printArea");
-
-            const options = {
-                margin: 10,
-                filename: 'MAJ-Travel-Itinerary.pdf',
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-
-            html2pdf().set(options).from(element).save();
-        });
-
-        loadPrintData();
-    </script>
+<script src="print.js"></script>
 
 </body>
 </html>
