@@ -16,22 +16,21 @@ h1 {
 
 #board {
     display: flex;
-    overflow-x: auto;
     gap: 10px;
     padding: 10px;
+    justify-content: space-between;
 }
 
 .dayColumn {
     background: white;
     border-radius: 10px;
     padding: 10px;
-    min-width: 160px;   /* smaller columns */
-    max-width: 160px;   /* fits all 7 days */
+    width: 13%;
     box-shadow: 0 0 5px rgba(0,0,0,0.2);
 }
 
 .sortable {
-    min-height: 60px;
+    min-height: 80px;
     padding: 5px;
     border: 2px dashed #ccc;
     border-radius: 6px;
@@ -43,7 +42,6 @@ h1 {
     margin: 5px 0;
     border-radius: 6px;
     cursor: grab;
-    list-style: none;
     display: flex;
     justify-content: space-between;
 }
@@ -51,7 +49,6 @@ h1 {
 .drag-hint {
     opacity: 0.6;
     font-size: 12px;
-    margin-left: 10px;
 }
 
 #map {
@@ -59,4 +56,23 @@ h1 {
     margin: 20px;
     border-radius: 10px;
     background: #ddd;
+}
+
+#bottomButtons {
+    text-align: center;
+    margin: 20px;
+}
+
+#bottomButtons button {
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 6px;
+    border: none;
+    background: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+#bottomButtons button:hover {
+    background: #0056b3;
 }
