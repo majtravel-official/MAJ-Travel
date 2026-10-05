@@ -195,3 +195,20 @@ body.planner .tab {
     flex: 0 0 200px;         /* fixed width so all columns stay equal */
     display: inline-block;   /* ensures columns stay in one row */
 }
+/* Ensure all 7 day columns remain visible and scrollable */
+#board {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    overflow-x: auto;        /* horizontal scroll */
+    overflow-y: hidden;      /* prevent vertical clipping */
+    white-space: nowrap;
+    min-height: 260px;       /* ensures columns never get cut off */
+}
+
+.dayColumn {
+    flex: 0 0 200px;         /* fixed width for consistent layout */
+    height: 240px;           /* ensures full column visibility */
+    overflow-y: auto;        /* scroll inside each day if stops overflow */
+    display: inline-block;
+}
