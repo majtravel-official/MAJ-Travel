@@ -27,12 +27,25 @@ body {
 }
 
 .dayColumn {
-    flex: 0 0 200px;
-    height: 240px;
-    overflow-y: auto;
+    flex: 0 0 220px;
+    min-height: 260px;
     background: #fff;
     padding: 10px;
     border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+.dayColumn h2 {
+    margin: 0 0 8px 0;
+}
+
+.dayColumn ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex: 1;
+    min-height: 40px; /* allows dropping into empty days */
 }
 
 #board li {
@@ -49,6 +62,10 @@ body {
 
 #board li:active {
     cursor: grabbing;
+}
+
+.stop-name {
+    flex: 1;
 }
 
 .drag-hint {
