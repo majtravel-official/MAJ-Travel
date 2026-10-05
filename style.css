@@ -227,3 +227,10 @@ body.planner .tab {
 .delete-btn:hover {
     background: #b02a37;
 }
+/* Ensure stop rows display all elements (name, drag, delete) */
+#board li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
