@@ -1,110 +1,63 @@
-let stops = {
-    day1: [],
-    day2: [],
-    day3: [],
-    day4: [],
-    day5: [],
-    day6: [],
-    day7: []
-};
-
-let coordinates = {
-    day1: [],
-    day2: [],
-    day3: [],
-    day4: [],
-    day5: [],
-    day6: [],
-    day7: []
-};
-
-function addStop() {
-    const name = document.getElementById("stopInput").value.trim();
-    const time = document.getElementById("timeInput").value.trim();
-    const day = document.getElementById("daySelect").value;
-
-    if (!name) return alert("Enter a destination");
-    if (!time) return alert("Enter a time");
-
-    const li = document.createElement("li");
-    li.innerHTML = `<span>${time} - ${name}</span><span class="drag-hint">⇅ drag</span>`;
-    li.dataset.day = day;
-    document.getElementById(day + "List").appendChild(li);
-
-    stops[day].push({ name, time });
-
-    getCoordinates(name, coords => {
-        if (!coords) return;
-
-        coordinates[day].push({
-            lat: coords.lat,
-            lng: coords.lng,
-            name,
-            time
-        });
-
-        updateDayRoute(day, coordinates[day]);
-    });
-
-    document.getElementById("stopInput").value = "";
-    document.getElementById("timeInput").value = "";
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f5f5f5;
 }
 
-function clearAll() {
-    for (let d = 1; d <= 7; d++) {
-        const key = `day${d}`;
-        stops[key] = [];
-        coordinates[key] = [];
-        document.getElementById(key + "List").innerHTML = "";
-        if (dayRoutes[key]) {
-            map.removeControl(dayRoutes[key]);
-            dayRoutes[key] = null;
-        }
-        if (dayMarkers[key]) {
-            dayMarkers[key].forEach(m => map.removeLayer(m));
-            dayMarkers[key] = [];
-        }
-    }
+h1 {
+    text-align: center;
+    padding: 20px;
 }
 
-// initialise Sortable on each day list
-document.querySelectorAll(".sortable").forEach(list => {
-    Sortable.create(list, {
-        group: "days",
-        animation: 150,
-        handle: "span", // whole item is draggable
-        onEnd: function () {
-            rebuildFromUI();
-        }
-    });
-});
+#controls {
+    text-align: center;
+    padding: 10px;
+}
 
-// rebuild internal data + routes from what’s on screen
-function rebuildFromUI() {
-    for (let d = 1; d <= 7; d++) {
-        const key = `day${d}`;
-        stops[key] = [];
-        coordinates[key] = [];
+#board {
+    display: flex;
+    overflow-x: auto;
+    gap: 15px;
+    padding: 20px;
+    scroll-snap-type: x mandatory;
+}
 
-        const items = document.querySelectorAll(`#${key}List li`);
-        items.forEach(li => {
-            const text = li.querySelector("span").innerText;
-            const [time, name] = text.split(" - ");
+.dayColumn {
+    background: white;
+    border-radius: 10px;
+    padding: 10px;
+    min-width: 220px;
+    max-width: 220px;
+    scroll-snap-align: start;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
+}
 
-            stops[key].push({ name, time });
+.sortable {
+    min-height: 60px;
+    padding: 5px;
+    border: 2px dashed #ccc;
+    border-radius: 6px;
+}
 
-            getCoordinates(name, coords => {
-                if (!coords) return;
+.sortable li {
+    background: #e9ecef;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 6px;
+    cursor: grab;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+}
 
-                coordinates[key].push({
-                    lat: coords.lat,
-                    lng: coords.lng,
-                    name,
-                    time
-                });
+.drag-hint {
+    opacity: 0.6;
+    font-size: 12px;
+    margin-left: 10px;
+}
 
-                updateDayRoute(key, coordinates[key]);
-            });
-        });
-    }
+#map {
+    height: 500px;
+    margin: 20px;
+    border-radius: 10px;
 }
