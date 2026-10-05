@@ -13,7 +13,6 @@ function addStop() {
 
     const li = document.createElement("li");
 
-    // DELETE BUTTON + DRAG HANDLE + NAME
     li.innerHTML = `
         <span>${name}</span>
         <span class="drag-hint">⇅ drag</span>
@@ -25,14 +24,12 @@ function addStop() {
 
     stops[day].push(name);
 
-    // If we already have coordinates, use them
     if (coordinates[name]) {
         updateAllRoutes();
         document.getElementById("stopInput").value = "";
         return;
     }
 
-    // Otherwise geocode once
     getCoordinates(name, coords => {
         if (!coords) {
             alert("Could not find location: " + name);
@@ -51,20 +48,11 @@ function clearAll() {
         const key = `day${d}`;
         stops[key] = [];
         document.getElementById(key + "List").innerHTML = "";
-
-        if (dayRoutes[key]) {
-            map.removeControl(dayRoutes[key]);
-            dayRoutes[key] = null;
-        }
-
-        if (dayMarkers[key]) {
-            dayMarkers[key].forEach(m => map.removeLayer(m));
-            dayMarkers[key] = [];
-        }
     }
+
+    document.getElementById("directionsContent").innerHTML = "";
 }
 
-// DRAG & DROP
 document.querySelectorAll(".sortable").forEach(list => {
     Sortable.create(list, {
         group: "days",
@@ -90,6 +78,8 @@ function rebuildStopsFromUI() {
 }
 
 function updateAllRoutes() {
+    document.getElementById("directionsContent").innerHTML = "";
+
     for (let d = 1; d <= 7; d++) {
         const key = `day${d}`;
         const locs = stops[key].map(name => coordinates[name]).filter(Boolean);
@@ -97,14 +87,8 @@ function updateAllRoutes() {
     }
 }
 
-// ⭐ DELETE STOP FUNCTION (SAFE)
 function deleteStop(name, day, element) {
-    // Remove from stops array
     stops[day] = stops[day].filter(n => n !== name);
-
-    // Remove from UI
     element.parentElement.remove();
-
-    // Rebuild routes
     updateAllRoutes();
 }
