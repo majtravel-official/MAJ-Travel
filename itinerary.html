@@ -1,26 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>MAJ Travel – Build Your Itinerary</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <title>MAJ Travel – Itinerary Builder</title>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="style.css">
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
-<script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 </head>
-
 <body>
 
 <header class="header">
-    <h1>MAJ Travel – Itinerary Builder</h1>
+    <div class="header-inner">
+        <img src="img/majtravel-logo.png" alt="MAJ Travel Logo" class="logo-large">
+        <h1 class="header-title">MAJ Travel – Itinerary Builder</h1>
+        <div class="header-accent"></div>
+    </div>
 </header>
 
-<div id="controls">
+<section id="controls">
     <input id="stopInput" placeholder="Enter destination">
     <select id="daySelect">
         <option value="day1">Day 1</option>
@@ -32,30 +36,51 @@
         <option value="day7">Day 7</option>
     </select>
     <button onclick="addStop()">Add Stop</button>
-</div>
+</section>
 
-<div id="board">
-    <div class="dayColumn"><h2>Day 1</h2><ul id="day1List" class="sortable"></ul></div>
-    <div class="dayColumn"><h2>Day 2</h2><ul id="day2List" class="sortable"></ul></div>
-    <div class="dayColumn"><h2>Day 3</h2><ul id="day3List" class="sortable"></ul></div>
-    <div class="dayColumn"><h2>Day 4</h2><ul id="day4List" class="sortable"></ul></div>
-    <div class="dayColumn"><h2>Day 5</h2><ul id="day5List" class="sortable"></ul></div>
-    <div class="dayColumn"><h2>Day 6</h2><ul id="day6List" class="sortable"></ul></div>
-    <div class="dayColumn"><h2>Day 7</h2><ul id="day7List" class="sortable"></ul></div>
-</div>
+<section id="board">
+    <div class="dayColumn">
+        <h2>Day 1</h2>
+        <ul id="day1List" class="sortable"></ul>
+    </div>
+    <div class="dayColumn">
+        <h2>Day 2</h2>
+        <ul id="day2List" class="sortable"></ul>
+    </div>
+    <div class="dayColumn">
+        <h2>Day 3</h2>
+        <ul id="day3List" class="sortable"></ul>
+    </div>
+    <div class="dayColumn">
+        <h2>Day 4</h2>
+        <ul id="day4List" class="sortable"></ul>
+    </div>
+    <div class="dayColumn">
+        <h2>Day 5</h2>
+        <ul id="day5List" class="sortable"></ul>
+    </div>
+    <div class="dayColumn">
+        <h2>Day 6</h2>
+        <ul id="day6List" class="sortable"></ul>
+    </div>
+    <div class="dayColumn">
+        <h2>Day 7</h2>
+        <ul id="day7List" class="sortable"></ul>
+    </div>
+</section>
 
 <div id="map"></div>
 
-<div id="directionsArea">
-    <h2>Route Directions</h2>
+<section id="directionsArea">
+    <h2 class="directions-title">Route Directions</h2>
     <div id="directionsContent"></div>
-</div>
+</section>
 
-<div id="bottomButtons">
+<section id="bottomButtons">
     <button onclick="downloadItinerary()">Download Itinerary</button>
     <button onclick="clearAll()">Clear All</button>
     <button onclick="resetMap()">Reset Map</button>
-</div>
+</section>
 
 <script src="travel-time.js"></script>
 <script src="maps.js"></script>
