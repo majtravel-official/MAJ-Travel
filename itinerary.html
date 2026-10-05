@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
 <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
 
-<!-- SortableJS (drag & drop) -->
+<!-- SortableJS -->
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 
 </head>
@@ -21,9 +21,9 @@
 
 <h1>MAJ Travel – Build Your Itinerary</h1>
 
+<!-- Controls -->
 <div id="controls">
     <input id="stopInput" placeholder="Enter destination">
-    <input id="timeInput" placeholder="Time (e.g., 09:00)">
     <select id="daySelect">
         <option value="day1">Day 1</option>
         <option value="day2">Day 2</option>
@@ -37,18 +37,21 @@
     <button onclick="clearAll()">Clear All</button>
 </div>
 
+<!-- Trello-style board -->
 <div id="board">
-    <div class="dayColumn" id="day1Column"><h2>Day 1</h2><ul id="day1List" class="sortable"></ul></div>
-    <div class="dayColumn" id="day2Column"><h2>Day 2</h2><ul id="day2List" class="sortable"></ul></div>
-    <div class="dayColumn" id="day3Column"><h2>Day 3</h2><ul id="day3List" class="sortable"></ul></div>
-    <div class="dayColumn" id="day4Column"><h2>Day 4</h2><ul id="day4List" class="sortable"></ul></div>
-    <div class="dayColumn" id="day5Column"><h2>Day 5</h2><ul id="day5List" class="sortable"></ul></div>
-    <div class="dayColumn" id="day6Column"><h2>Day 6</h2><ul id="day6List" class="sortable"></ul></div>
-    <div class="dayColumn" id="day7Column"><h2>Day 7</h2><ul id="day7List" class="sortable"></ul></div>
+    <div class="dayColumn"><h2>Day 1</h2><ul id="day1List" class="sortable"></ul></div>
+    <div class="dayColumn"><h2>Day 2</h2><ul id="day2List" class="sortable"></ul></div>
+    <div class="dayColumn"><h2>Day 3</h2><ul id="day3List" class="sortable"></ul></div>
+    <div class="dayColumn"><h2>Day 4</h2><ul id="day4List" class="sortable"></ul></div>
+    <div class="dayColumn"><h2>Day 5</h2><ul id="day5List" class="sortable"></ul></div>
+    <div class="dayColumn"><h2>Day 6</h2><ul id="day6List" class="sortable"></ul></div>
+    <div class="dayColumn"><h2>Day 7</h2><ul id="day7List" class="sortable"></ul></div>
 </div>
 
+<!-- Map -->
 <div id="map"></div>
 
+<!-- Scripts -->
 <script src="travel-time.js"></script>
 <script src="maps.js"></script>
 <script src="script.js"></script>
