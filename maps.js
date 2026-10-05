@@ -1,3 +1,4 @@
+console.log("maps.js loaded");
 let map;
 let dayRoutes = {};
 let dayMarkers = {};
