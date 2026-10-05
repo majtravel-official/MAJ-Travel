@@ -56,10 +56,12 @@ function clearAll() {
         stops[key] = [];
         coordinates[key] = [];
         document.getElementById(key + "List").innerHTML = "";
+
         if (dayRoutes[key]) {
             map.removeControl(dayRoutes[key]);
             dayRoutes[key] = null;
         }
+
         if (dayMarkers[key]) {
             dayMarkers[key].forEach(m => map.removeLayer(m));
             dayMarkers[key] = [];
@@ -67,19 +69,17 @@ function clearAll() {
     }
 }
 
-// initialise Sortable on each day list
 document.querySelectorAll(".sortable").forEach(list => {
     Sortable.create(list, {
         group: "days",
         animation: 150,
-        handle: "span", // whole item is draggable
+        handle: "span",
         onEnd: function () {
             rebuildFromUI();
         }
     });
 });
 
-// rebuild internal data + routes from what’s on screen
 function rebuildFromUI() {
     for (let d = 1; d <= 7; d++) {
         const key = `day${d}`;
