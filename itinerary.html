@@ -3,58 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Itinerary Builder – MAJ Travel</title>
+    <title>MAJ Travel – Build Your Itinerary</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <h1>Itinerary Builder</h1>
+    <!-- HEADER -->
+    <header>
+        <h1>MAJ Travel – Itinerary Builder</h1>
+    </header>
 
-    <div>
-        <input id="stopInput" type="text" placeholder="Enter stop">
-        <input id="timeInput" type="time">
- 
-        <select id="daySelect">
-            <option value="day1">Day 1</option>
-            <option value="day2">Day 2</option>
-            <option value="day3">Day 3</option>
-            <option value="day4">Day 4</option>
-            <option value="day5">Day 5</option>
-            <option value="day6">Day 6</option>
-            <option value="day7">Day 7</option>
-        </select>
+    <!-- NAVIGATION -->
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="itinerary.html">Build Itinerary</a>
+        <a href="print.html">Print</a>
+        <a href="about.html">About</a>
+    </nav>
 
-        <button onclick="addStop()">Add Stop</button>
+    <!-- MAIN CONTENT -->
+    <div class="main-card">
+        <h2>Build Your 7‑Day Itinerary</h2>
+
+        <!-- Add Stop Controls -->
+        <div>
+            <input id="stopInput" type="text" placeholder="Enter stop name">
+            <input id="timeInput" type="time">
+            <select id="daySelect">
+                <option value="day1">Day 1</option>
+                <option value="day2">Day 2</option>
+                <option value="day3">Day 3</option>
+                <option value="day4">Day 4</option>
+                <option value="day5">Day 5</option>
+                <option value="day6">Day 6</option>
+                <option value="day7">Day 7</option>
+            </select>
+            <button onclick="addStop()">Add Stop</button>
+        </div>
+
+        <!-- 7 Day Lists -->
+        <div class="day-container">
+            <h2>Day 1</h2>
+            <ul id="day1List"></ul>
+        </div>
+
+        <div class="day-container">
+            <h2>Day 2</h2>
+            <ul id="day2List"></ul>
+        </div>
+
+        <div class="day-container">
+            <h2>Day 3</h2>
+            <ul id="day3List"></ul>
+        </div>
+
+        <div class="day-container">
+            <h2>Day 4</h2>
+            <ul id="day4List"></ul>
+        </div>
+
+        <div class="day-container">
+            <h2>Day 5</h2>
+            <ul id="day5List"></ul>
+        </div>
+
+        <div class="day-container">
+            <h2>Day 6</h2>
+            <ul id="day6List"></ul>
+        </div>
+
+        <div class="day-container">
+            <h2>Day 7</h2>
+            <ul id="day7List"></ul>
+        </div>
+
+        <!-- Map Preview -->
+        <h2>Route Preview</h2>
+        <div id="map"></div>
+
+        <!-- Action Buttons -->
+        <button onclick="shareItinerary()">Share Itinerary</button>
+        <button onclick="downloadJSON()">Download JSON</button>
+        <button onclick="clearAll()">Clear All</button>
     </div>
 
-    <!-- 7 DAY LISTS -->
-    <div class="day-container"><h2>Day 1</h2><ul id="day1List"></ul></div>
-    <div class="day-container"><h2>Day 2</h2><ul id="day2List"></ul></div>
-    <div class="day-container"><h2>Day 3</h2><ul id="day3List"></ul></div>
-    <div class="day-container"><h2>Day 4</h2><ul id="day4List"></ul></div>
-    <div class="day-container"><h2>Day 5</h2><ul id="day5List"></ul></div>
-    <div class="day-container"><h2>Day 6</h2><ul id="day6List"></ul></div>
-    <div class="day-container"><h2>Day 7</h2><ul id="day7List"></ul></div>
+    <!-- FOOTER -->
+    <footer>
+        <p>© MAJ Travel – Coach-Friendly Itinerary Builder</p>
+    </footer>
 
-    <!-- PRINT VIEW BUTTON -->
-    <button onclick="window.location.href='print.html'">View Printable Itinerary</button>
-
-    <!-- NEW FEATURE BUTTONS -->
-    <button onclick="shareItinerary()">Share Itinerary</button>
-    <button onclick="downloadJSON()">Download JSON</button>
-    <button onclick="clearAll()">Clear All</button>
-
-    <!-- GOOGLE MAP PREVIEW -->
-    <div id="map"></div>
-
-    <!-- CORE SCRIPTS -->
+    <!-- SCRIPTS -->
     <script src="script.js"></script>
     <script src="travel-time.js"></script>
     <script src="maps.js"></script>
 
-    <!-- GOOGLE MAPS API (corrected with callback) -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initMap"></script>
+    <!-- GOOGLE MAPS API -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
 
 </body>
 </html>
