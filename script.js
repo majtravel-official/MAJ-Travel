@@ -18,7 +18,7 @@ const DAYS = ["day1","day2","day3","day4","day5","day6","day7"];
 function createListItem(text, notes = "", photo = "") {
     const li = document.createElement("li");
     li.draggable = true;
-
+ 
     // Main stop text
     const mainText = document.createElement("div");
     mainText.textContent = text;
