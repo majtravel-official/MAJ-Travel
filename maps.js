@@ -1,6 +1,6 @@
 /* ============================================================
    MAJ TRAVEL — GOOGLE MAPS ROUTE PREVIEW ENGINE
-   MODULE 6
+   MODULE 4
 ============================================================ */
 
 let map;
@@ -8,12 +8,12 @@ let directionsService;
 let directionsRenderer;
 
 /* ------------------------------------------------------------
-   INITIALISE MAP
+   INITIALISE GOOGLE MAPS
 ------------------------------------------------------------ */
 function initMap() {
     map = new google.maps.Map(document.getElementById("map"), {
         zoom: 7,
-        center: { lat: 53.4808, lng: -2.2426 } // Manchester (default)
+        center: { lat: 53.4808, lng: -2.2426 } // Manchester default
     });
 
     directionsService = new google.maps.DirectionsService();
@@ -27,7 +27,7 @@ function initMap() {
 }
 
 /* ------------------------------------------------------------
-   GET ALL STOPS IN ORDER
+   GET ALL STOPS FROM LOCAL STORAGE
 ------------------------------------------------------------ */
 function getAllStops() {
     const saved = JSON.parse(localStorage.getItem("itinerary"));
@@ -36,8 +36,10 @@ function getAllStops() {
     const allStops = [];
 
     Object.keys(saved).forEach(day => {
-        saved[day].forEach(item => {
-            allStops.push(item.text);
+        saved[day].forEach(stop => {
+            if (stop.text && stop.text.trim() !== "") {
+                allStops.push(stop.text);
+            }
         });
     });
 
@@ -45,12 +47,12 @@ function getAllStops() {
 }
 
 /* ------------------------------------------------------------
-   UPDATE ROUTE PREVIEW
+   UPDATE ROUTE PREVIEW ON MAP
 ------------------------------------------------------------ */
 function updateRoutePreview() {
     const stops = getAllStops();
 
-    if (!stops || stops.length < 2) {
+    if (stops.length < 2) {
         directionsRenderer.setDirections({ routes: [] });
         return;
     }
@@ -78,13 +80,13 @@ function updateRoutePreview() {
 }
 
 /* ------------------------------------------------------------
-   LISTEN FOR ITINERARY CHANGES
+   UPDATE MAP WHEN ITINERARY CHANGES
 ------------------------------------------------------------ */
 window.addEventListener("storage", () => {
     updateRoutePreview();
 });
 
 /* ------------------------------------------------------------
-   INITIALISE
+   EXPOSE INIT FUNCTION FOR GOOGLE API CALLBACK
 ------------------------------------------------------------ */
 window.initMap = initMap;
