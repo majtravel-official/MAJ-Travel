@@ -1,70 +1,180 @@
 /* ============================================================
-   MAJ TRAVEL — PRINT ENGINE
-   MODULE 4: PHOTO SYSTEM ENABLED
+   MAJ TRAVEL — FULL 7‑DAY ITINERARY BUILDER ENGINE
+   MODULE 5: TRAVEL‑TIME ENABLED
 ============================================================ */
 
-function loadPrintData() {
+const DAYS = ["day1","day2","day3","day4","day5","day6","day7"];
+
+/* ------------------------------------------------------------
+   CREATE LIST ITEM (Stop)
+------------------------------------------------------------ */
+function createListItem(text, notes = "", photo = "", travelTime = "") {
+    const li = document.createElement("li");
+    li.draggable = true;
+
+    // Main stop text
+    const mainText = document.createElement("div");
+    mainText.textContent = text;
+    mainText.classList.add("stop-text");
+
+    // Notes box
+    const notesBox = document.createElement("textarea");
+    notesBox.placeholder = "Notes...";
+    notesBox.value = notes;
+    notesBox.classList.add("notes-box");
+    notesBox.addEventListener("input", saveItinerary);
+
+    // Photo URL input
+    const photoInput = document.createElement("input");
+    photoInput.type = "text";
+    photoInput.placeholder = "Photo URL";
+    photoInput.value = photo;
+    photoInput.classList.add("photo-box");
+    photoInput.addEventListener("input", () => {
+        updatePhotoPreview(li, photoInput.value);
+        saveItinerary();
+    });
+
+    // Photo preview
+    updatePhotoPreview(li, photo);
+
+    // Travel time display
+    const travelDiv = document.createElement("div");
+    travelDiv.classList.add("travel-time");
+    travelDiv.textContent = travelTime ? `Travel time: ${travelTime}` : "";
+    li.appendChild(travelDiv);
+
+    li.appendChild(mainText);
+    li.appendChild(notesBox);
+    li.appendChild(photoInput);
+
+    // Drag events
+    li.addEventListener("dragstart", dragStart);
+    li.addEventListener("dragend", dragEnd);
+
+    return li;
+}
+
+/* ------------------------------------------------------------
+   UPDATE PHOTO PREVIEW
+------------------------------------------------------------ */
+function updatePhotoPreview(li, url) {
+    const oldImg = li.querySelector(".stop-photo");
+    if (oldImg) oldImg.remove();
+
+    if (url && url.trim() !== "") {
+        const img = document.createElement("img");
+        img.src = url;
+        img.classList.add("stop-photo");
+        li.appendChild(img);
+    }
+}
+
+/* ------------------------------------------------------------
+   ADD STOP
+------------------------------------------------------------ */
+function addStop() {
+    const input = document.getElementById("stopInput");
+    const time = document.getElementById("timeInput").value;
+    const day = document.getElementById("daySelect").value;
+
+    if (input.value.trim() !== "") {
+        const text = (time ? time + " — " : "") + input.value;
+        const li = createListItem(text);
+
+        document.getElementById(day + "List").appendChild(li);
+
+        input.value = "";
+        document.getElementById("timeInput").value = "";
+
+        saveItinerary();
+        updateAllTravelTimes();
+    }
+}
+
+/* ------------------------------------------------------------
+   DRAG & DROP (Cross‑Day)
+------------------------------------------------------------ */
+let draggedItem = null;
+
+function dragStart(e) {
+    draggedItem = e.target;
+    e.target.classList.add("dragging");
+
+    document.querySelectorAll("ul").forEach(list => {
+        list.addEventListener("dragover", dragOver);
+        list.addEventListener("drop", dropItem);
+        list.classList.add("highlight");
+    });
+}
+
+function dragEnd(e) {
+    e.target.classList.remove("dragging");
+
+    document.querySelectorAll("ul").forEach(list => {
+        list.removeEventListener("dragover", dragOver);
+        list.removeEventListener("drop", dropItem);
+        list.classList.remove("highlight");
+    });
+
+    saveItinerary();
+    updateAllTravelTimes();
+}
+
+function dragOver(e) {
+    e.preventDefault();
+}
+
+function dropItem(e) {
+    e.preventDefault();
+    const list = e.currentTarget;
+
+    if (draggedItem && list) {
+        list.appendChild(draggedItem);
+        saveItinerary();
+        updateAllTravelTimes();
+    }
+}
+
+/* ------------------------------------------------------------
+   SAVE ITINERARY (LocalStorage)
+------------------------------------------------------------ */
+function saveItinerary() {
+    const data = {};
+
+    DAYS.forEach(day => {
+        const items = [];
+        document.querySelectorAll(`#${day}List li`).forEach(li => {
+            items.push({
+                text: li.querySelector(".stop-text").textContent,
+                notes: li.querySelector(".notes-box").value,
+                photo: li.querySelector(".photo-box").value,
+                travelTime: li.querySelector(".travel-time").textContent.replace("Travel time: ", "")
+            });
+        });
+        data[day] = items;
+    });
+
+    localStorage.setItem("itinerary", JSON.stringify(data));
+}
+
+/* ------------------------------------------------------------
+   LOAD ITINERARY
+------------------------------------------------------------ */
+function loadItinerary() {
     const saved = JSON.parse(localStorage.getItem("itinerary"));
     if (!saved) return;
- 
-    const container = document.getElementById("printArea");
 
-    Object.keys(saved).forEach(day => {
-        const section = document.createElement("div");
-        section.classList.add("day-section");
-
-        const title = document.createElement("h2");
-        title.textContent = day.toUpperCase().replace("DAY", "Day ");
-        section.appendChild(title);
-
+    DAYS.forEach(day => {
+        const list = document.getElementById(day + "List");
         saved[day].forEach(item => {
-            const stopDiv = document.createElement("div");
-            stopDiv.classList.add("stop");
-
-            // Stop text
-            const text = document.createElement("strong");
-            text.textContent = item.text;
-            stopDiv.appendChild(text);
-
-            // Notes
-            if (item.notes && item.notes.trim() !== "") {
-                const notes = document.createElement("div");
-                notes.classList.add("notes");
-                notes.textContent = item.notes;
-                stopDiv.appendChild(notes);
-            }
-
-            // Photo
-            if (item.photo && item.photo.trim() !== "") {
-                const img = document.createElement("img");
-                img.src = item.photo;
-                stopDiv.appendChild(img);
-            }
-
-            section.appendChild(stopDiv);
+            const li = createListItem(item.text, item.notes, item.photo, item.travelTime);
+            list.appendChild(li);
         });
-
-        container.appendChild(section);
     });
 }
 
 /* ------------------------------------------------------------
-   PDF EXPORT
------------------------------------------------------------- */
-document.getElementById("pdfBtn").addEventListener("click", () => {
-    const element = document.getElementById("printArea");
-
-    const options = {
-        margin: 10,
-        filename: 'MAJ-Travel-Itinerary.pdf',
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
-
-    html2pdf().set(options).from(element).save();
-});
-
-/* ------------------------------------------------------------
    INITIALISE
 ------------------------------------------------------------ */
-loadPrintData();
+loadItinerary();
