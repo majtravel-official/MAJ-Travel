@@ -6,7 +6,7 @@
 function loadPrintData() {
     const saved = JSON.parse(localStorage.getItem("itinerary"));
     if (!saved) return;
-
+ 
     const container = document.getElementById("printArea");
 
     Object.keys(saved).forEach(day => {
