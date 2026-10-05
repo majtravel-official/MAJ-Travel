@@ -1,4 +1,6 @@
-// Data structures
+// ===============================
+//   DATA STRUCTURES
+// ===============================
 
 let stops = {
     day1: [], day2: [], day3: [],
@@ -7,7 +9,10 @@ let stops = {
 
 let coordinates = {}; // name -> {lat, lng}
 
-// Add stop
+
+// ===============================
+//   ADD STOP
+// ===============================
 
 function addStop() {
     const name = document.getElementById("stopInput").value.trim();
@@ -18,6 +23,7 @@ function addStop() {
         return;
     }
 
+    // Create card
     const li = document.createElement("li");
     li.innerHTML = `
         <span class="stop-name">${name}</span>
@@ -26,16 +32,20 @@ function addStop() {
     `;
     li.dataset.day = day;
 
+    // Add to UI
     document.getElementById(day + "List").appendChild(li);
+
+    // Add to data
     stops[day].push(name);
 
+    // If coordinates already known, update routes immediately
     if (coordinates[name]) {
         updateAllRoutes();
         document.getElementById("stopInput").value = "";
         return;
     }
 
-    // getCoordinates is defined in travel-time.js
+    // Otherwise fetch coordinates
     getCoordinates(name, coords => {
         if (!coords) {
             alert("Could not find location: " + name);
@@ -48,7 +58,10 @@ function addStop() {
     document.getElementById("stopInput").value = "";
 }
 
-// Clear all
+
+// ===============================
+//   CLEAR ALL
+// ===============================
 
 function clearAll() {
     for (let d = 1; d <= 7; d++) {
@@ -59,7 +72,10 @@ function clearAll() {
     document.getElementById("directionsContent").innerHTML = "";
 }
 
-// Rebuild stops from UI after drag-and-drop
+
+// ===============================
+//   REBUILD STOPS FROM UI
+// ===============================
 
 function rebuildStopsFromUI() {
     for (let d = 1; d <= 7; d++) {
@@ -73,7 +89,10 @@ function rebuildStopsFromUI() {
     }
 }
 
-// Update all routes
+
+// ===============================
+//   UPDATE ALL ROUTES
+// ===============================
 
 function updateAllRoutes() {
     const container = document.getElementById("directionsContent");
@@ -89,7 +108,10 @@ function updateAllRoutes() {
     });
 }
 
-// Delete stop
+
+// ===============================
+//   DELETE STOP
+// ===============================
 
 function deleteStop(name, day, element) {
     stops[day] = stops[day].filter(n => n !== name);
@@ -97,7 +119,10 @@ function deleteStop(name, day, element) {
     updateAllRoutes();
 }
 
-// SortableJS setup
+
+// ===============================
+//   SORTABLEJS SETUP
+// ===============================
 
 document.querySelectorAll(".sortable").forEach(list => {
     Sortable.create(list, {
