@@ -14,17 +14,11 @@
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 </head>
 
-<body class="planner">
+<body>
 
 <header class="header">
     <h1>MAJ Travel – Itinerary Builder</h1>
-    <p class="tagline">Drag stops between days and watch routes rebuild automatically.</p>
 </header>
-
-<nav class="nav-tabs">
-    <a href="index.html" class="tab">Home</a>
-    <a href="itinerary.html" class="tab active">Itinerary Builder</a>
-</nav>
 
 <div id="controls">
     <input id="stopInput" placeholder="Enter destination">
@@ -52,7 +46,7 @@
 
 <div id="map"></div>
 
-<!-- ⭐ CLEAN DIRECTIONS AREA BELOW THE MAP -->
+<!-- ⭐ Directions BELOW the map -->
 <div id="directionsArea">
     <h2>Route Directions</h2>
     <div id="directionsContent"></div>
@@ -67,31 +61,6 @@
 <script src="travel-time.js"></script>
 <script src="maps.js"></script>
 <script src="script.js"></script>
-
-<script>
-function downloadItinerary() {
-    const fullData = {};
-
-    for (let d = 1; d <= 7; d++) {
-        const key = `day${d}`;
-        fullData[key] = stops[key].map(name => ({
-            name,
-            coordinates: coordinates[name] || null
-        }));
-    }
-
-    const blob = new Blob([JSON.stringify(fullData, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "itinerary.json";
-    a.click();
-}
-
-function resetMap() {
-    map.setView([53.48, -2.24], 6);
-}
-</script>
 
 </body>
 </html>
