@@ -1,37 +1,25 @@
 let stops = {
-    day1: [],
-    day2: [],
-    day3: [],
-    day4: [],
-    day5: [],
-    day6: [],
-    day7: []
+    day1: [], day2: [], day3: [],
+    day4: [], day5: [], day6: [], day7: []
 };
 
 let coordinates = {
-    day1: [],
-    day2: [],
-    day3: [],
-    day4: [],
-    day5: [],
-    day6: [],
-    day7: []
+    day1: [], day2: [], day3: [],
+    day4: [], day5: [], day6: [], day7: []
 };
 
 function addStop() {
     const name = document.getElementById("stopInput").value.trim();
-    const time = document.getElementById("timeInput").value.trim();
     const day = document.getElementById("daySelect").value;
 
     if (!name) return alert("Enter a destination");
-    if (!time) return alert("Enter a time");
 
     const li = document.createElement("li");
-    li.innerHTML = `<span>${time} - ${name}</span><span class="drag-hint">⇅ drag</span>`;
+    li.innerHTML = `<span>${name}</span><span class="drag-hint">⇅ drag</span>`;
     li.dataset.day = day;
     document.getElementById(day + "List").appendChild(li);
 
-    stops[day].push({ name, time });
+    stops[day].push({ name });
 
     getCoordinates(name, coords => {
         if (!coords) return;
@@ -39,15 +27,13 @@ function addStop() {
         coordinates[day].push({
             lat: coords.lat,
             lng: coords.lng,
-            name,
-            time
+            name
         });
 
         updateDayRoute(day, coordinates[day]);
     });
 
     document.getElementById("stopInput").value = "";
-    document.getElementById("timeInput").value = "";
 }
 
 function clearAll() {
@@ -73,7 +59,6 @@ document.querySelectorAll(".sortable").forEach(list => {
     Sortable.create(list, {
         group: "days",
         animation: 150,
-        handle: "span",
         onEnd: function () {
             rebuildFromUI();
         }
@@ -88,10 +73,9 @@ function rebuildFromUI() {
 
         const items = document.querySelectorAll(`#${key}List li`);
         items.forEach(li => {
-            const text = li.querySelector("span").innerText;
-            const [time, name] = text.split(" - ");
+            const name = li.querySelector("span").innerText;
 
-            stops[key].push({ name, time });
+            stops[key].push({ name });
 
             getCoordinates(name, coords => {
                 if (!coords) return;
@@ -99,8 +83,7 @@ function rebuildFromUI() {
                 coordinates[key].push({
                     lat: coords.lat,
                     lng: coords.lng,
-                    name,
-                    time
+                    name
                 });
 
                 updateDayRoute(key, coordinates[key]);
