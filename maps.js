@@ -7,6 +7,8 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 let dayRoutes = {};
 let dayMarkers = {};
 
+const dayOrder = ["day1","day2","day3","day4","day5","day6","day7"];
+
 function updateDayRoute(day, locs) {
     if (dayRoutes[day]) {
         map.removeControl(dayRoutes[day]);
@@ -44,6 +46,15 @@ function updateDayRoute(day, locs) {
             box.innerHTML += `<p>${i.text}</p>`;
         });
 
-        document.getElementById("directionsContent").appendChild(box);
+        const container = document.getElementById("directionsContent");
+        const index = dayOrder.indexOf(day);
+        const existingBoxes = Array.from(container.querySelectorAll(".directionBox"));
+
+        // insert box in correct Day 1–7 order
+        if (index >= existingBoxes.length) {
+            container.appendChild(box);
+        } else {
+            container.insertBefore(box, existingBoxes[index]);
+        }
     });
 }
