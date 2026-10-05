@@ -14,7 +14,7 @@ function loadPrintableItinerary() {
         printArea.innerHTML = "<p>No itinerary found.</p>";
         return;
     }
- 
+
     printArea.innerHTML = ""; // Clear existing content
 
     Object.keys(saved).forEach(day => {
