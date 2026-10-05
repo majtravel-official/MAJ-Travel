@@ -37,23 +37,24 @@
     <div class="day-container"><h2>Day 6</h2><ul id="day6List"></ul></div>
     <div class="day-container"><h2>Day 7</h2><ul id="day7List"></ul></div>
 
+    <!-- PRINT VIEW BUTTON -->
     <button onclick="window.location.href='print.html'">View Printable Itinerary</button>
+
+    <!-- NEW FEATURE BUTTONS -->
+    <button onclick="shareItinerary()">Share Itinerary</button>
+    <button onclick="downloadJSON()">Download JSON</button>
+    <button onclick="clearAll()">Clear All</button>
 
     <!-- GOOGLE MAP PREVIEW -->
     <div id="map"></div>
 
+    <!-- CORE SCRIPTS -->
     <script src="script.js"></script>
     <script src="travel-time.js"></script>
     <script src="maps.js"></script>
 
-    <!-- Google Maps API (corrected) -->
+    <!-- GOOGLE MAPS API (corrected with callback) -->
     <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initMap"></script>
 
 </body>
 </html>
-<button onclick="shareItinerary()">Share Itinerary</button>
-<button onclick="downloadJSON()">Download JSON</button>
-<button onclick="clearAll()">Clear All</button>
-<button onclick="shareItinerary()">Share Itinerary</button>
-<button onclick="downloadJSON()">Download JSON</button>
-<button onclick="clearAll()">Clear All</button>
