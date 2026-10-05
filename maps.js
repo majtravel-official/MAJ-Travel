@@ -1,57 +1,38 @@
-let map;
+let map = L.map('map').setView([53.48, -2.24], 6);
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
+
 let dayRoutes = {};
 let dayMarkers = {};
 
-const dayColours = {
-    day1: "#007bff",
-    day2: "#28a745",
-    day3: "#fd7e14",
-    day4: "#6f42c1",
-    day5: "#20c997",
-    day6: "#e83e8c",
-    day7: "#ffc107"
-};
-
-function initMap() {
-    map = L.map('map').setView([53.48, -2.24], 6);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '© OpenStreetMap'
-    }).addTo(map);
-}
-
-function updateDayRoute(day, locations) {
-    if (!map) return;
-
+function updateDayRoute(day, locs) {
     if (dayRoutes[day]) {
         map.removeControl(dayRoutes[day]);
     }
-
     if (dayMarkers[day]) {
         dayMarkers[day].forEach(m => map.removeLayer(m));
     }
     dayMarkers[day] = [];
 
-    if (locations.length < 2) return;
+    if (locs.length < 2) return;
 
     dayRoutes[day] = L.Routing.control({
-        waypoints: locations.map(loc => L.latLng(loc.lat, loc.lng)),
-        lineOptions: {
-            styles: [{ color: dayColours[day], weight: 5 }]
-        },
-        addWaypoints: false,
+        waypoints: locs.map(c => L.latLng(c.lat, c.lng)),
+        routeWhileDragging: false,
         draggableWaypoints: false,
-        fitSelectedRoutes: true,
-        show: true,
-        routeWhileDragging: false
+        addWaypoints: false,
+        show: true
     }).addTo(map);
 
-    locations.forEach(loc => {
-        const marker = L.marker([loc.lat, loc.lng]).addTo(map);
-        marker.bindPopup(`<b>${loc.name}</b>`);
-        dayMarkers[day].push(marker);
-    });
-}
+    // ⭐ MOVE ALL ROUTING PANELS INTO SCROLL WRAPPER
+    setTimeout(() => {
+        const wrapper = document.getElementById("routeScrollWrapper");
+        const panels = document.querySelectorAll(".leaflet-routing-container");
 
-window.addEventListener("load", initMap);
+        panels.forEach(panel => {
+            wrapper.appendChild(panel);
+        });
+    }, 200);
+}
