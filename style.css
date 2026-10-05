@@ -1,9 +1,21 @@
+/* ============================================================
+   MAJ TRAVEL — GLOBAL STYLES & THEME
+============================================================ */
+
 /* -----------------------------------------
    GLOBAL STYLES
 ----------------------------------------- */
+:root {
+    --maj-gold: #d4af37;
+    --maj-dark: #222;
+    --maj-light: #f7f7f7;
+    --maj-card: #ffffff;
+}
+
 body {
     font-family: Arial, sans-serif;
-    background: #f7f7f7;
+    background: var(--maj-light);
+    color: var(--maj-dark);
     padding: 20px;
     margin: 0;
 }
@@ -15,12 +27,55 @@ h1, h2 {
 
 button {
     padding: 10px 20px;
-    background: #d4af37;
+    background: var(--maj-gold);
     border: none;
     color: white;
     border-radius: 5px;
     cursor: pointer;
     font-size: 16px;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+/* -----------------------------------------
+   NAVIGATION BAR
+----------------------------------------- */
+header {
+    background: var(--maj-dark);
+    color: #fff;
+    padding: 15px 0;
+    text-align: center;
+}
+
+nav {
+    background: var(--maj-dark);
+    padding: 10px 0;
+    text-align: center;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 12px;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: var(--maj-gold);
+}
+
+/* -----------------------------------------
+   MAIN CARD (Homepage & Layout Blocks)
+----------------------------------------- */
+.main-card {
+    max-width: 900px;
+    margin: 20px auto;
+    background: var(--maj-card);
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid #ddd;
 }
 
 /* -----------------------------------------
@@ -43,7 +98,7 @@ li {
     background: #fafafa;
     padding: 10px;
     margin-bottom: 10px;
-    border-left: 4px solid #d4af37;
+    border-left: 4px solid var(--maj-gold);
     border-radius: 4px;
 }
 
@@ -109,43 +164,63 @@ li {
     font-size: 14px;
     color: #333;
 }
+
 /* -----------------------------------------
-   MAJ TRAVEL THEME
+   FOOTER
 ----------------------------------------- */
-:root {
-    --maj-gold: #d4af37;
-    --maj-dark: #222;
-    --maj-light: #f7f7f7;
-    --maj-card: #ffffff;
+footer {
+    text-align: center;
+    margin-top: 40px;
+    padding: 15px 0;
+    color: #777;
+    font-size: 14px;
 }
 
-body {
-    background: var(--maj-light);
-    color: var(--maj-dark);
+/* -----------------------------------------
+   RESPONSIVE LAYOUT
+----------------------------------------- */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .day-container,
+    .main-card {
+        padding: 15px;
+    }
+
+    nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    nav a {
+        margin: 5px;
+        font-size: 14px;
+    }
 }
 
-header,
-nav {
-    background: var(--maj-dark);
-    color: #fff;
-}
+/* -----------------------------------------
+   PRINT STYLES
+----------------------------------------- */
+@media print {
+    body {
+        background: #ffffff;
+        padding: 0;
+        margin: 0;
+    }
 
-nav a {
-    color: #fff;
-    text-decoration: none;
-    margin: 0 10px;
-    font-weight: bold;
-}
+    header, nav, footer {
+        display: none;
+    }
 
-nav a:hover {
-    color: var(--maj-gold);
-}
-
-.main-card {
-    max-width: 900px;
-    margin: 0 auto;
-    background: var(--maj-card);
-    border-radius: 10px;
-    padding: 20px;
-    border: 1px solid #ddd;
+    .print-day {
+        page-break-inside: avoid;
+    }
 }
