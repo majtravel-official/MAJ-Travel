@@ -1,6 +1,6 @@
 /* ============================================================
    MAJ TRAVEL — FULL 7‑DAY ITINERARY BUILDER ENGINE
-   MODULE 4: PHOTO SYSTEM ENABLED
+   MODULE 5: TRAVEL‑TIME ENABLED
 ============================================================ */
 
 const DAYS = ["day1","day2","day3","day4","day5","day6","day7"];
@@ -8,7 +8,7 @@ const DAYS = ["day1","day2","day3","day4","day5","day6","day7"];
 /* ------------------------------------------------------------
    CREATE LIST ITEM (Stop)
 ------------------------------------------------------------ */
-function createListItem(text, notes = "", photo = "") {
+function createListItem(text, notes = "", photo = "", travelTime = "") {
     const li = document.createElement("li");
     li.draggable = true;
 
@@ -38,6 +38,12 @@ function createListItem(text, notes = "", photo = "") {
     // Photo preview
     updatePhotoPreview(li, photo);
 
+    // Travel time display
+    const travelDiv = document.createElement("div");
+    travelDiv.classList.add("travel-time");
+    travelDiv.textContent = travelTime ? `Travel time: ${travelTime}` : "";
+    li.appendChild(travelDiv);
+
     li.appendChild(mainText);
     li.appendChild(notesBox);
     li.appendChild(photoInput);
@@ -53,7 +59,6 @@ function createListItem(text, notes = "", photo = "") {
    UPDATE PHOTO PREVIEW
 ------------------------------------------------------------ */
 function updatePhotoPreview(li, url) {
-    // Remove old preview
     const oldImg = li.querySelector(".stop-photo");
     if (oldImg) oldImg.remove();
 
@@ -83,6 +88,7 @@ function addStop() {
         document.getElementById("timeInput").value = "";
 
         saveItinerary();
+        updateAllTravelTimes();
     }
 }
 
@@ -112,6 +118,7 @@ function dragEnd(e) {
     });
 
     saveItinerary();
+    updateAllTravelTimes();
 }
 
 function dragOver(e) {
@@ -125,6 +132,7 @@ function dropItem(e) {
     if (draggedItem && list) {
         list.appendChild(draggedItem);
         saveItinerary();
+        updateAllTravelTimes();
     }
 }
 
@@ -140,7 +148,8 @@ function saveItinerary() {
             items.push({
                 text: li.querySelector(".stop-text").textContent,
                 notes: li.querySelector(".notes-box").value,
-                photo: li.querySelector(".photo-box").value
+                photo: li.querySelector(".photo-box").value,
+                travelTime: li.querySelector(".travel-time").textContent.replace("Travel time: ", "")
             });
         });
         data[day] = items;
@@ -159,32 +168,24 @@ function loadItinerary() {
     DAYS.forEach(day => {
         const list = document.getElementById(day + "List");
         saved[day].forEach(item => {
-            const li = createListItem(item.text, item.notes, item.photo);
+            const li = createListItem(item.text, item.notes, item.photo, item.travelTime);
             list.appendChild(li);
         });
     });
 }
 
 /* ------------------------------------------------------------
-   INITIALISE
+   SHARE ITINERARY (Copy JSON to Clipboard)
 ------------------------------------------------------------ */
-loadItinerary();
-/* ============================================================
-   SHARE ITINERARY LINK
-============================================================ */
 function shareItinerary() {
     const data = localStorage.getItem("itinerary");
-    const encoded = encodeURIComponent(data);
-
-    const shareURL = `${window.location.origin}${window.location.pathname}?itinerary=${encoded}`;
-
-    navigator.clipboard.writeText(shareURL);
-
-    alert("Share link copied to clipboard!");
+    navigator.clipboard.writeText(data);
+    alert("Itinerary copied to clipboard!");
 }
-/* ============================================================
-   DOWNLOAD ITINERARY.JSON
-============================================================ */
+
+/* ------------------------------------------------------------
+   DOWNLOAD JSON
+------------------------------------------------------------ */
 function downloadJSON() {
     const data = localStorage.getItem("itinerary");
     const blob = new Blob([data], { type: "application/json" });
@@ -192,17 +193,23 @@ function downloadJSON() {
 
     const a = document.createElement("a");
     a.href = url;
-    a.download = "itinerary.json";
+    a.download = "MAJ-Travel-Itinerary.json";
     a.click();
 
     URL.revokeObjectURL(url);
 }
-/* ============================================================
-   CLEAR ALL ITINERARY DATA
-============================================================ */
-function clearAll() {
-    if (!confirm("Are you sure you want to clear the entire itinerary?")) return;
 
-    localStorage.removeItem("itinerary");
-    location.reload();
+/* ------------------------------------------------------------
+   CLEAR ALL
+------------------------------------------------------------ */
+function clearAll() {
+    if (confirm("Clear entire itinerary?")) {
+        localStorage.removeItem("itinerary");
+        location.reload();
+    }
 }
+
+/* ------------------------------------------------------------
+   INITIALISE
+------------------------------------------------------------ */
+loadItinerary();
