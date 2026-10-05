@@ -250,7 +250,8 @@ body {
     border-top: 1px solid #333333;
 }
 
-#bottomButtons button {
+#bottomButtons button,
+.home-button {
     padding: 8px 14px;
     border-radius: 4px;
     border: none;
@@ -260,8 +261,10 @@ body {
     cursor: pointer;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    text-decoration: none;
 }
 
-#bottomButtons button:hover {
+#bottomButtons button:hover,
+.home-button:hover {
     background: #e0bf4a;
 }
