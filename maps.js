@@ -48,7 +48,7 @@ function updateDayRoute(day, locations) {
 
     locations.forEach(loc => {
         const marker = L.marker([loc.lat, loc.lng]).addTo(map);
-        marker.bindPopup(`<b>${loc.name}</b><br>${loc.time}`);
+        marker.bindPopup(`<b>${loc.name}</b>`);
         dayMarkers[day].push(marker);
     });
 }
