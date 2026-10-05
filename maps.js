@@ -43,7 +43,7 @@ function updateDayRoute(day, locations) {
         addWaypoints: false,
         draggableWaypoints: false,
         fitSelectedRoutes: true,
-        show: true,                 /* SHOW INSTRUCTIONS */
+        show: true,
         routeWhileDragging: false
     }).addTo(map);
 
