@@ -1,43 +1,115 @@
+/* Base */
+
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background: #f4f4f4;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #111111;
+    color: #f5f5f5;
 }
 
+/* Header */
+
 .header {
-    background: #003366;
-    color: white;
-    padding: 15px;
+    background: #000000;
+    padding: 20px 0 10px 0;
     text-align: center;
 }
 
+.header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.logo-large {
+    height: 140px; /* L1a-H2 */
+    display: block;
+    margin: 0 auto 10px auto;
+}
+
+.header-title {
+    margin: 0;
+    font-family: "Georgia", "Times New Roman", serif;
+    font-size: 26px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #f5f5f5;
+}
+
+.header-accent {
+    margin: 12px auto 0 auto;
+    width: 160px;
+    height: 3px;
+    background: #d4af37;
+    border-radius: 999px;
+}
+
+/* Controls */
+
 #controls {
-    padding: 10px;
-    background: #fff;
+    background: #181818;
+    padding: 12px 16px;
     display: flex;
     gap: 10px;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #333333;
 }
+
+#controls input,
+#controls select {
+    padding: 8px 10px;
+    border-radius: 4px;
+    border: 1px solid #444444;
+    background: #101010;
+    color: #f5f5f5;
+}
+
+#controls button {
+    padding: 8px 14px;
+    border-radius: 4px;
+    border: none;
+    background: #d4af37;
+    color: #111111;
+    font-weight: 600;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+#controls button:hover {
+    background: #e0bf4a;
+}
+
+/* Board */
 
 #board {
     display: flex;
-    gap: 10px;
-    padding: 10px;
+    gap: 12px;
+    padding: 16px;
     overflow-x: auto;
     white-space: nowrap;
+    background: #111111;
 }
 
 .dayColumn {
-    flex: 0 0 220px;
+    flex: 0 0 230px;
     min-height: 260px;
-    background: #fff;
+    background: #1a1a1a;
     padding: 10px;
-    border-radius: 8px;
+    border-radius: 10px;
+    border: 1px solid #d4af37;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.6);
     display: flex;
     flex-direction: column;
 }
 
 .dayColumn h2 {
     margin: 0 0 8px 0;
+    font-family: "Georgia", "Times New Roman", serif;
+    font-size: 18px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #d4af37;
 }
 
 .dayColumn ul {
@@ -45,19 +117,22 @@ body {
     padding: 0;
     margin: 0;
     flex: 1;
-    min-height: 40px; /* allows dropping into empty days */
+    min-height: 50px; /* allow dropping into empty days */
 }
+
+/* Cards */
 
 #board li {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 8px;
-    padding: 6px;
-    background: #eee;
+    padding: 8px;
+    background: #222222;
     margin-bottom: 6px;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: grab;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
 }
 
 #board li:active {
@@ -66,23 +141,30 @@ body {
 
 .stop-name {
     flex: 1;
+    font-size: 14px;
 }
 
 .drag-hint {
     opacity: 0.6;
     font-size: 14px;
+    color: #bbbbbb;
 }
+
+/* Drag states */
 
 .dragging {
     opacity: 0.4;
 }
 
 .ghost {
-    background: #ccc;
+    background: #333333;
+    border: 1px dashed #d4af37;
 }
 
+/* Delete button */
+
 .delete-btn {
-    background: #dc3545;
+    background: #b02a37;
     color: white;
     border: none;
     padding: 4px 8px;
@@ -92,35 +174,94 @@ body {
 }
 
 .delete-btn:hover {
-    background: #b02a37;
+    background: #dc3545;
 }
+
+/* Map */
 
 #map {
     height: 400px;
-    margin: 10px;
-    border-radius: 8px;
+    margin: 0 16px 16px 16px;
+    border-radius: 10px;
     overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.7);
 }
 
-/* Directions BELOW the map */
+/* Directions area */
+
 #directionsArea {
-    background: #ffffff;
-    padding: 15px;
-    margin: 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    background: #181818;
+    padding: 16px;
+    margin: 0 16px 16px 16px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.7);
+    border: 1px solid #333333;
+}
+
+.directions-title {
+    margin: 0 0 10px 0;
+    font-family: "Georgia", "Times New Roman", serif;
+    font-size: 20px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #d4af37;
 }
 
 #directionsContent {
-    max-height: 400px;
+    max-height: 420px;
     overflow-y: auto;
-    padding-right: 10px;
+    padding-right: 8px;
 }
 
+/* Direction boxes */
+
 .directionBox {
-    background: #fafafa;
-    padding: 10px;
+    background: #202020;
+    padding: 10px 12px;
     margin-bottom: 12px;
-    border-radius: 6px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+    border-left: 3px solid #d4af37;
+}
+
+.directionBox h3 {
+    margin: 0 0 6px 0;
+    font-family: "Georgia", "Times New Roman", serif;
+    font-size: 16px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #f5f5f5;
+}
+
+.directionBox p {
+    margin: 2px 0;
+    font-size: 13px;
+    color: #dddddd;
+}
+
+/* Bottom buttons */
+
+#bottomButtons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 16px 20px 16px;
+    background: #111111;
+    border-top: 1px solid #333333;
+}
+
+#bottomButtons button {
+    padding: 8px 14px;
+    border-radius: 4px;
+    border: none;
+    background: #d4af37;
+    color: #111111;
+    font-weight: 600;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+#bottomButtons button:hover {
+    background: #e0bf4a;
 }
