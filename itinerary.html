@@ -26,7 +26,6 @@
     <div class="main-card">
         <h2>Build Your 7‑Day Itinerary</h2>
 
-        <!-- Add Stop Controls -->
         <div>
             <input id="stopInput" type="text" placeholder="Enter stop name">
             <input id="timeInput" type="time">
@@ -42,47 +41,17 @@
             <button onclick="addStop()">Add Stop</button>
         </div>
 
-        <!-- 7 Day Lists -->
-        <div class="day-container">
-            <h2>Day 1</h2>
-            <ul id="day1List"></ul>
-        </div>
+        <div class="day-container"><h2>Day 1</h2><ul id="day1List"></ul></div>
+        <div class="day-container"><h2>Day 2</h2><ul id="day2List"></ul></div>
+        <div class="day-container"><h2>Day 3</h2><ul id="day3List"></ul></div>
+        <div class="day-container"><h2>Day 4</h2><ul id="day4List"></ul></div>
+        <div class="day-container"><h2>Day 5</h2><ul id="day5List"></ul></div>
+        <div class="day-container"><h2>Day 6</h2><ul id="day6List"></ul></div>
+        <div class="day-container"><h2>Day 7</h2><ul id="day7List"></ul></div>
 
-        <div class="day-container">
-            <h2>Day 2</h2>
-            <ul id="day2List"></ul>
-        </div>
-
-        <div class="day-container">
-            <h2>Day 3</h2>
-            <ul id="day3List"></ul>
-        </div>
-
-        <div class="day-container">
-            <h2>Day 4</h2>
-            <ul id="day4List"></ul>
-        </div>
-
-        <div class="day-container">
-            <h2>Day 5</h2>
-            <ul id="day5List"></ul>
-        </div>
-
-        <div class="day-container">
-            <h2>Day 6</h2>
-            <ul id="day6List"></ul>
-        </div>
-
-        <div class="day-container">
-            <h2>Day 7</h2>
-            <ul id="day7List"></ul>
-        </div>
-
-        <!-- Map Preview -->
         <h2>Route Preview</h2>
         <div id="map"></div>
 
-        <!-- Action Buttons -->
         <button onclick="shareItinerary()">Share Itinerary</button>
         <button onclick="downloadJSON()">Download JSON</button>
         <button onclick="clearAll()">Clear All</button>
@@ -93,12 +62,9 @@
         <p>© MAJ Travel – Coach-Friendly Itinerary Builder</p>
     </footer>
 
-    <!-- SCRIPTS -->
     <script src="script.js"></script>
     <script src="travel-time.js"></script>
     <script src="maps.js"></script>
-
-    <!-- GOOGLE MAPS API -->
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
 
 </body>
