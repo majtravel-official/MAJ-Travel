@@ -1,223 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Itinerary Builder – MAJ Travel</title>
- 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f7f7f7;
-            padding: 20px;
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .day-container {
-            margin-bottom: 25px;
-            padding: 15px;
-            background: white;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-        }
-
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        li {
-            background: #fafafa;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-left: 4px solid #d4af37;
-            border-radius: 4px;
-        }
-
-        .notes-box {
-            width: 100%;
-            margin-top: 5px;
-            padding: 6px;
-            font-size: 14px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            resize: vertical;
-        }
-
-        .highlight {
-            background: #fff8e1;
-        }
-
-        button {
-            padding: 10px 20px;
-            background: #d4af37;
-            border: none;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .back-btn {
-            display: block;
-            margin-top: 15px;
-            text-align: center;
-        }
-    </style>
+    <title>Itinerary Builder</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-    <h1>Itinerary Builder</h1>
+<h1>Itinerary Builder</h1>
 
-    <div>
-        <input id="stopInput" type="text" placeholder="Enter stop">
-        <input id="timeInput" type="time">
-        <select id="daySelect">
-            <option value="day1">Day 1</option>
-            <option value="day2">Day 2</option>
-            <option value="day3">Day 3</option>
-        </select>
-        <button onclick="addStop()">Add Stop</button>
-    </div>
+<div>
+    <input id="stopInput" type="text" placeholder="Enter stop">
+    <input id="timeInput" type="time">
+    <select id="daySelect">
+        <option value="day1">Day 1</option>
+        <option value="day2">Day 2</option>
+        <option value="day3">Day 3</option>
+        <option value="day4">Day 4</option>
+        <option value="day5">Day 5</option>
+        <option value="day6">Day 6</option>
+        <option value="day7">Day 7</option>
+    </select>
+    <button onclick="addStop()">Add Stop</button>
+</div>
 
-    <div class="day-container">
-        <h2>Day 1</h2>
-        <ul id="day1List"></ul>
-    </div>
+<!-- 7 DAY LISTS -->
+<div class="day-container"><h2>Day 1</h2><ul id="day1List"></ul></div>
+<div class="day-container"><h2>Day 2</h2><ul id="day2List"></ul></div>
+<div class="day-container"><h2>Day 3</h2><ul id="day3List"></ul></div>
+<div class="day-container"><h2>Day 4</h2><ul id="day4List"></ul></div>
+<div class="day-container"><h2>Day 5</h2><ul id="day5List"></ul></div>
+<div class="day-container"><h2>Day 6</h2><ul id="day6List"></ul></div>
+<div class="day-container"><h2>Day 7</h2><ul id="day7List"></ul></div>
 
-    <div class="day-container">
-        <h2>Day 2</h2>
-        <ul id="day2List"></ul>
-    </div>
+<button onclick="window.location.href='print.html'">View Printable Itinerary</button>
 
-    <div class="day-container">
-        <h2>Day 3</h2>
-        <ul id="day3List"></ul>
-    </div>
+<!-- GOOGLE MAP -->
+<div id="map"></div>
 
-    <button onclick="window.location.href='print.html'">View Printable Itinerary</button>
-    <a class="back-btn" href="index.html">← Back to Home</a>
-
-    <script>
-        function createListItem(text, notes = "") {
-            const li = document.createElement("li");
-            li.draggable = true;
-
-            const mainText = document.createElement("div");
-            mainText.textContent = text;
-            mainText.classList.add("stop-text");
-
-            const notesBox = document.createElement("textarea");
-            notesBox.placeholder = "Notes...";
-            notesBox.value = notes;
-            notesBox.classList.add("notes-box");
-
-            notesBox.addEventListener("input", saveItinerary);
-
-            li.appendChild(mainText);
-            li.appendChild(notesBox);
-
-            li.addEventListener("dragstart", dragStart);
-            li.addEventListener("dragend", dragEnd);
-
-            return li;
-        }
-
-        function addStop() {
-            const input = document.getElementById("stopInput");
-            const time = document.getElementById("timeInput").value;
-            const day = document.getElementById("daySelect").value;
-
-            if (input.value.trim() !== "") {
-                const text = (time ? time + " — " : "") + input.value;
-                const li = createListItem(text);
-
-                document.getElementById(day + "List").appendChild(li);
-
-                input.value = "";
-                document.getElementById("timeInput").value = "";
-
-                saveItinerary();
-            }
-        }
-
-        let draggedItem = null;
-
-        function dragStart(e) {
-            draggedItem = e.target;
-            e.target.classList.add("dragging");
-
-            document.querySelectorAll("ul").forEach(list => {
-                list.addEventListener("dragover", dragOver);
-                list.addEventListener("drop", dropItem);
-                list.classList.add("highlight");
-            });
-        }
-
-        function dragEnd(e) {
-            e.target.classList.remove("dragging");
-
-            document.querySelectorAll("ul").forEach(list => {
-                list.removeEventListener("dragover", dragOver);
-                list.removeEventListener("drop", dropItem);
-                list.classList.remove("highlight");
-            });
-
-            saveItinerary();
-        }
-
-        function dragOver(e) {
-            e.preventDefault();
-        }
-
-        function dropItem(e) {
-            e.preventDefault();
-            const list = e.currentTarget;
-
-            if (draggedItem && list) {
-                list.appendChild(draggedItem);
-                saveItinerary();
-            }
-        }
-
-        function saveItinerary() {
-            const days = ["day1", "day2", "day3"];
-            const data = {};
-
-            days.forEach(day => {
-                const items = [];
-                document.querySelectorAll(`#${day}List li`).forEach(li => {
-                    items.push({
-                        text: li.querySelector(".stop-text").textContent,
-                        notes: li.querySelector(".notes-box").value
-                    });
-                });
-                data[day] = items;
-            });
-
-            localStorage.setItem("itinerary", JSON.stringify(data));
-        }
-
-        function loadItinerary() {
-            const saved = JSON.parse(localStorage.getItem("itinerary"));
-            if (!saved) return;
-
-            Object.keys(saved).forEach(day => {
-                const list = document.getElementById(day + "List");
-                saved[day].forEach(item => {
-                    const li = createListItem(item.text, item.notes);
-                    list.appendChild(li);
-                });
-            });
-        }
-
-        loadItinerary();
-    </script>
+<script src="script.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
 
 </body>
 </html>
