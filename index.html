@@ -1,55 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MAJ Travel – Itinerary Builder</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>MAJ Travel – Home</title>
+<link rel="stylesheet" href="style.css">
 </head>
+<body class="home">
 
-<body>
+<header class="header">
+    <h1>MAJ Travel</h1>
+    <p class="tagline">Coach-friendly, relaxed itineraries for real people.</p>
+</header>
 
-    <!-- HEADER -->
-    <header>
-        <h1>MAJ Travel – Itinerary Builder</h1>
-    </header>
+<nav class="nav-tabs">
+    <a href="index.html" class="tab active">Home</a>
+    <a href="itinerary.html" class="tab">Itinerary Builder</a>
+    <!-- You can add more tabs here later -->
+</nav>
 
-    <!-- NAVIGATION -->
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="itinerary.html">Build Itinerary</a>
-        <a href="print.html">Print</a>
-        <a href="about.html">About</a>
-    </nav>
+<main class="home-main">
+    <section class="card">
+        <h2>Itinerary Planner</h2>
+        <p>Build and visualise multi-day coach itineraries with routes and stops.</p>
+        <a href="itinerary.html" class="primary-btn">Open Itinerary Builder</a>
+    </section>
 
-    <!-- MAIN HOMEPAGE CONTENT -->
-    <div class="main-card">
-        <h2>Plan Your Perfect Coach-Friendly Itinerary</h2>
+    <section class="card">
+        <h2>Your Tours</h2>
+        <p>Use this space later for links to specific tour PDFs or Etsy listings.</p>
+    </section>
+</main>
 
-        <p>
-            Build structured, coach-friendly multi-day itineraries with realistic travel times,
-            notes, photos, and printable PDFs. Ideal for tour operators, school trips, coastal
-            excursions, and professional itinerary planning.
-        </p>
-
-        <h3>Features</h3>
-        <ul>
-            <li>Create up to 7 days of stops</li>
-            <li>Add times, notes, and photos</li>
-            <li>Auto-calculate travel time between stops</li>
-            <li>Preview routes on a map</li>
-            <li>Download a clean printable PDF</li>
-        </ul>
-
-        <button onclick="window.location.href='itinerary.html'">
-            Start Building Your Itinerary
-        </button>
-    </div>
-
-    <!-- FOOTER -->
-    <footer>
-        <p>© MAJ Travel – Coach-Friendly Itinerary Builder</p>
-    </footer>
+<footer class="footer">
+    <p>© MAJ Travel – Stockport, North West & North Wales</p>
+</footer>
 
 </body>
 </html>
