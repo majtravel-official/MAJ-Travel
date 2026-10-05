@@ -16,7 +16,7 @@ function loadPrintableItinerary() {
     }
 
     printArea.innerHTML = ""; // Clear existing content
-
+ 
     Object.keys(saved).forEach(day => {
         const dayBlock = document.createElement("div");
         dayBlock.classList.add("print-day");
