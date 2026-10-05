@@ -16,6 +16,12 @@ function updateDayRoute(day, locs) {
     }
     dayMarkers[day] = [];
 
+    // remove any existing directions box for this day
+    const existingBox = document.getElementById(`dir-${day}`);
+    if (existingBox) {
+        existingBox.remove();
+    }
+
     if (locs.length < 2) return;
 
     dayRoutes[day] = L.Routing.control({
@@ -31,6 +37,7 @@ function updateDayRoute(day, locs) {
 
         const box = document.createElement("div");
         box.className = "directionBox";
+        box.id = `dir-${day}`;
         box.innerHTML = `<h3>${day.toUpperCase()}</h3>`;
 
         instructions.forEach(i => {
