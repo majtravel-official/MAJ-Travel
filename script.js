@@ -19,57 +19,79 @@ let coordinates = {
 };
 
 function addStop() {
-    const stopName = document.getElementById("stopInput").value;
-    const stopTime = document.getElementById("timeInput").value;
+    const name = document.getElementById("stopInput").value;
+    const time = document.getElementById("timeInput").value;
     const day = document.getElementById("daySelect").value;
 
-    if (!stopName) return alert("Please enter a stop name.");
+    if (!name) return alert("Enter a destination");
 
-    // Add stop to UI list
-    const list = document.getElementById(day + "List");
     const li = document.createElement("li");
-    li.textContent = `${stopTime} - ${stopName}`;
-    list.appendChild(li);
+    li.innerHTML = `<span>${time} - ${name}</span>`;
+    document.getElementById(day + "List").appendChild(li);
 
-    // Store stop
-    stops[day].push({ name: stopName, time: stopTime });
+    stops[day].push({ name, time });
 
-    // Get coordinates
-    getCoordinates(stopName, function(coords) {
-        if (coords) {
-            coordinates[day].push({
-                lat: coords.lat,
-                lng: coords.lng,
-                name: stopName,
-                time: stopTime
-            });
+    getCoordinates(name, coords => {
+        if (!coords) return;
 
-            // Update route for that day only
-            updateDayRoute(day, coordinates[day]);
-        }
+        coordinates[day].push({
+            lat: coords.lat,
+            lng: coords.lng,
+            name,
+            time
+        });
+
+        updateDayRoute(day, coordinates[day]);
     });
 
-    // Clear inputs
     document.getElementById("stopInput").value = "";
     document.getElementById("timeInput").value = "";
 }
 
 function clearAll() {
     for (let d = 1; d <= 7; d++) {
-        const dayKey = `day${d}`;
-        stops[dayKey] = [];
-        coordinates[dayKey] = [];
-        document.getElementById(`day${d}List`).innerHTML = "";
+        const key = `day${d}`;
+        stops[key] = [];
+        coordinates[key] = [];
+        document.getElementById(key + "List").innerHTML = "";
     }
+}
 
-    // Remove all routes and markers
-    for (let day in dayRoutes) {
-        map.removeControl(dayRoutes[day]);
-    }
-    dayRoutes = {};
+document.querySelectorAll(".sortable").forEach(list => {
+    Sortable.create(list, {
+        group: "days",
+        animation: 150,
+        onSort: function () {
+            rebuildFromUI();
+        }
+    });
+});
 
-    for (let day in dayMarkers) {
-        dayMarkers[day].forEach(m => map.removeLayer(m));
+function rebuildFromUI() {
+    for (let d = 1; d <= 7; d++) {
+        const key = `day${d}`;
+        stops[key] = [];
+        coordinates[key] = [];
+
+        const items = document.querySelectorAll(`#${key}List li`);
+        items.forEach(li => {
+            const text = li.innerText;
+            const [time, name] = text.split(" - ");
+
+            stops[key].push({ name, time });
+
+            getCoordinates(name, coords => {
+                if (!coords) return;
+
+                coordinates[key].push({
+                    lat: coords.lat,
+                    lng: coords.lng,
+                    name,
+                    time
+                });
+
+                updateDayRoute(key, coordinates[key]);
+            });
+        });
     }
-    dayMarkers = {};
 }
