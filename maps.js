@@ -13,8 +13,6 @@ const dayColours = {
 };
 
 function initMap() {
-    console.log("initMap running");
-
     map = L.map('map').setView([53.48, -2.24], 6);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -24,10 +22,7 @@ function initMap() {
 }
 
 function updateDayRoute(day, locations) {
-    if (!map) {
-        console.log("map not ready");
-        return;
-    }
+    if (!map) return;
 
     if (dayRoutes[day]) {
         map.removeControl(dayRoutes[day]);
@@ -38,10 +33,7 @@ function updateDayRoute(day, locations) {
     }
     dayMarkers[day] = [];
 
-    if (locations.length < 2) {
-        console.log(`Day ${day} has fewer than 2 stops`);
-        return;
-    }
+    if (locations.length < 2) return;
 
     dayRoutes[day] = L.Routing.control({
         waypoints: locations.map(loc => L.latLng(loc.lat, loc.lng)),
