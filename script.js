@@ -12,7 +12,14 @@ function addStop() {
     if (!name) return alert("Enter a destination");
 
     const li = document.createElement("li");
-    li.innerHTML = `<span>${name}</span><span class="drag-hint">⇅ drag</span>`;
+
+    // DELETE BUTTON + DRAG HANDLE + NAME
+    li.innerHTML = `
+        <span>${name}</span>
+        <span class="drag-hint">⇅ drag</span>
+        <button class="delete-btn" onclick="deleteStop('${name}', '${day}', this)">✖</button>
+    `;
+
     li.dataset.day = day;
     document.getElementById(day + "List").appendChild(li);
 
@@ -57,6 +64,7 @@ function clearAll() {
     }
 }
 
+// DRAG & DROP
 document.querySelectorAll(".sortable").forEach(list => {
     Sortable.create(list, {
         group: "days",
@@ -87,4 +95,16 @@ function updateAllRoutes() {
         const locs = stops[key].map(name => coordinates[name]).filter(Boolean);
         updateDayRoute(key, locs);
     }
+}
+
+// ⭐ DELETE STOP FUNCTION (SAFE)
+function deleteStop(name, day, element) {
+    // Remove from stops array
+    stops[day] = stops[day].filter(n => n !== name);
+
+    // Remove from UI
+    element.parentElement.remove();
+
+    // Rebuild routes
+    updateAllRoutes();
 }
