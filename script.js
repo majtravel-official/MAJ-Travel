@@ -60,7 +60,7 @@ document.querySelectorAll(".sortable").forEach(list => {
         group: "days",
         animation: 150,
         onEnd: function () {
-            rebuildFromUI();
+            setTimeout(rebuildFromUI, 300);
         }
     });
 });
