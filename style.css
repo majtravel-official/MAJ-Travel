@@ -257,3 +257,22 @@ body.planner .tab {
 .delete-btn:hover {
     background: #b02a37;
 }
+/* Make ALL routing panels scrollable together */
+.leaflet-bottom.leaflet-left {
+    max-height: 300px;          /* limit total height */
+    overflow-y: auto;           /* scroll all panels together */
+    overflow-x: hidden;
+    display: block;
+    padding-right: 10px;
+}
+
+/* Make each individual routing panel tidy */
+.leaflet-routing-container {
+    background: #fff;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;        /* spacing between panels */
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    max-height: 260px;          /* internal scroll if needed */
+    overflow-y: auto;
+}
