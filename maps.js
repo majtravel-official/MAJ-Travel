@@ -11,7 +11,7 @@ const dayColours = {
     day6: "#e83e8c",
     day7: "#ffc107"
 };
-
+ 
 function initMap() {
     map = L.map('map').setView([53.48, -2.24], 6);
 
