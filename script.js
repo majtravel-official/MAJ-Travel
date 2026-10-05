@@ -3,10 +3,7 @@ let stops = {
     day4: [], day5: [], day6: [], day7: []
 };
 
-let coordinates = {
-    day1: [], day2: [], day3: [],
-    day4: [], day5: [], day6: [], day7: []
-};
+let coordinates = {};   // store coordinates by name permanently
 
 function addStop() {
     const name = document.getElementById("stopInput").value.trim();
@@ -19,18 +16,24 @@ function addStop() {
     li.dataset.day = day;
     document.getElementById(day + "List").appendChild(li);
 
-    stops[day].push({ name });
+    stops[day].push(name);
 
+    // If we already have coordinates, use them
+    if (coordinates[name]) {
+        updateAllRoutes();
+        document.getElementById("stopInput").value = "";
+        return;
+    }
+
+    // Otherwise geocode once
     getCoordinates(name, coords => {
-        if (!coords) return;
+        if (!coords) {
+            alert("Could not find location: " + name);
+            return;
+        }
 
-        coordinates[day].push({
-            lat: coords.lat,
-            lng: coords.lng,
-            name
-        });
-
-        updateDayRoute(day, coordinates[day]);
+        coordinates[name] = coords;
+        updateAllRoutes();
     });
 
     document.getElementById("stopInput").value = "";
@@ -40,7 +43,6 @@ function clearAll() {
     for (let d = 1; d <= 7; d++) {
         const key = `day${d}`;
         stops[key] = [];
-        coordinates[key] = [];
         document.getElementById(key + "List").innerHTML = "";
 
         if (dayRoutes[key]) {
@@ -60,45 +62,29 @@ document.querySelectorAll(".sortable").forEach(list => {
         group: "days",
         animation: 150,
         onEnd: function () {
-            rebuildFromUI();
+            rebuildStopsFromUI();
+            updateAllRoutes();
         }
     });
 });
 
-function rebuildFromUI() {
-    let rebuildQueue = [];
-
+function rebuildStopsFromUI() {
     for (let d = 1; d <= 7; d++) {
         const key = `day${d}`;
         stops[key] = [];
-        coordinates[key] = [];
 
         const items = document.querySelectorAll(`#${key}List li`);
         items.forEach(li => {
             const name = li.querySelector("span").innerText;
-            stops[key].push({ name });
-            rebuildQueue.push({ day: key, name });
+            stops[key].push(name);
         });
     }
-
-    processQueue(rebuildQueue);
 }
 
-function processQueue(queue) {
-    if (queue.length === 0) return;
-
-    const item = queue.shift();
-
-    getCoordinates(item.name, coords => {
-        if (coords) {
-            coordinates[item.day].push({
-                lat: coords.lat,
-                lng: coords.lng,
-                name: item.name
-            });
-        }
-
-        updateDayRoute(item.day, coordinates[item.day]);
-        processQueue(queue);
-    });
+function updateAllRoutes() {
+    for (let d = 1; d <= 7; d++) {
+        const key = `day${d}`;
+        const locs = stops[key].map(name => coordinates[name]).filter(Boolean);
+        updateDayRoute(key, locs);
+    }
 }
