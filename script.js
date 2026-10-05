@@ -16,7 +16,7 @@ function createListItem(text, notes = "", photo = "", travelTime = "") {
     const mainText = document.createElement("div");
     mainText.textContent = text;
     mainText.classList.add("stop-text");
-
+ 
     // Notes box
     const notesBox = document.createElement("textarea");
     notesBox.placeholder = "Notes...";
