@@ -31,7 +31,7 @@ function updateDayRoute(day, locs) {
         routeWhileDragging: false,
         draggableWaypoints: false,
         addWaypoints: false,
-        show: false
+        show: false   // hide Leaflet's built‑in panel
     }).addTo(map);
 
     dayRoutes[day].on('routesfound', function(e) {
