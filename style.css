@@ -1,226 +1,55 @@
-/* ============================================================
-   MAJ TRAVEL — GLOBAL STYLES & THEME
-============================================================ */
-
-/* -----------------------------------------
-   GLOBAL STYLES
------------------------------------------ */
-:root {
-    --maj-gold: #d4af37;
-    --maj-dark: #222;
-    --maj-light: #f7f7f7;
-    --maj-card: #ffffff;
-}
-
 body {
     font-family: Arial, sans-serif;
-    background: var(--maj-light);
-    color: var(--maj-dark);
-    padding: 20px;
     margin: 0;
+    background: #f5f5f5;
 }
 
-h1, h2 {
+h1 {
     text-align: center;
-    margin-bottom: 20px;
-}
-
-button {
-    padding: 10px 20px;
-    background: var(--maj-gold);
-    border: none;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-button:hover {
-    opacity: 0.9;
-}
-
-/* -----------------------------------------
-   NAVIGATION BAR
------------------------------------------ */
-header {
-    background: var(--maj-dark);
-    color: #fff;
-    padding: 15px 0;
-    text-align: center;
-}
-
-nav {
-    background: var(--maj-dark);
-    padding: 10px 0;
-    text-align: center;
-}
-
-nav a {
-    color: #fff;
-    text-decoration: none;
-    margin: 0 12px;
-    font-weight: bold;
-}
-
-nav a:hover {
-    color: var(--maj-gold);
-}
-
-/* -----------------------------------------
-   MAIN CARD (Homepage & Layout Blocks)
------------------------------------------ */
-.main-card {
-    max-width: 900px;
-    margin: 20px auto;
-    background: var(--maj-card);
-    border-radius: 10px;
     padding: 20px;
-    border: 1px solid #ddd;
 }
 
-/* -----------------------------------------
-   ITINERARY BUILDER
------------------------------------------ */
-.day-container {
-    margin-bottom: 25px;
-    padding: 15px;
-    background: white;
-    border-radius: 8px;
-    border: 1px solid #ddd;
-}
-
-ul {
-    list-style: none;
-    padding: 0;
-}
-
-li {
-    background: #fafafa;
+#controls {
+    text-align: center;
     padding: 10px;
-    margin-bottom: 10px;
-    border-left: 4px solid var(--maj-gold);
-    border-radius: 4px;
 }
 
-.stop-text {
-    font-weight: bold;
-}
-
-.notes-box {
-    width: 100%;
-    margin-top: 5px;
-    padding: 6px;
-    font-size: 14px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    resize: vertical;
-}
-
-.photo-box {
-    width: 100%;
-    margin-top: 8px;
-}
-
-.stop-photo {
-    width: 100%;
-    margin-top: 8px;
-    border-radius: 6px;
-}
-
-/* -----------------------------------------
-   MAP SECTION
------------------------------------------ */
-#map {
-    width: 100%;
-    height: 400px;
-    margin-top: 20px;
-    border-radius: 8px;
-}
-
-/* -----------------------------------------
-   PRINT PAGE (TEXT‑ONLY VERSION)
------------------------------------------ */
-.print-day {
-    margin-bottom: 30px;
+#board {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
     padding: 20px;
+}
+
+.dayColumn {
     background: white;
-    border-radius: 8px;
-    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    min-width: 250px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.2);
 }
 
-.print-stop-text {
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-.print-notes {
-    font-style: italic;
-    margin-top: 5px;
-    color: #555;
-}
-
-.print-travel {
-    margin-top: 5px;
-    font-size: 14px;
-    color: #333;
-}
-
-/* -----------------------------------------
-   FOOTER
------------------------------------------ */
-footer {
+.dayColumn h2 {
     text-align: center;
-    margin-top: 40px;
-    padding: 15px 0;
-    color: #777;
-    font-size: 14px;
 }
 
-/* -----------------------------------------
-   RESPONSIVE LAYOUT
------------------------------------------ */
-@media (max-width: 768px) {
-    body {
-        padding: 10px;
-    }
-
-    button {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-
-    .day-container,
-    .main-card {
-        padding: 15px;
-    }
-
-    nav {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-
-    nav a {
-        margin: 5px;
-        font-size: 14px;
-    }
+.sortable li {
+    background: #e9ecef;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 6px;
+    cursor: grab;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
 }
 
-/* -----------------------------------------
-   PRINT STYLES
------------------------------------------ */
-@media print {
-    body {
-        background: #ffffff;
-        padding: 0;
-        margin: 0;
-    }
+.sortable li:hover {
+    background: #d8d8d8;
+}
 
-    header, nav, footer {
-        display: none;
-    }
-
-    .print-day {
-        page-break-inside: avoid;
-    }
+#map {
+    height: 500px;
+    margin: 20px;
+    border-radius: 10px;
 }
