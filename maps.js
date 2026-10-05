@@ -1,4 +1,6 @@
-// Map setup
+// ===============================
+//   MAP INITIALISATION
+// ===============================
 
 let map = L.map('map').setView([53.48, -2.24], 6);
 
@@ -6,14 +8,23 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
 
+
+// ===============================
+//   ROUTE + MARKER STORAGE
+// ===============================
+
 let dayRoutes = {};
 let dayMarkers = {};
 
 const dayOrder = ["day1","day2","day3","day4","day5","day6","day7"];
 
-// Update route for a single day
+
+// ===============================
+//   UPDATE ROUTE FOR A SINGLE DAY
+// ===============================
 
 function updateDayRoute(day, locs) {
+
     // Remove existing route control
     if (dayRoutes[day]) {
         map.removeControl(dayRoutes[day]);
@@ -31,6 +42,7 @@ function updateDayRoute(day, locs) {
         existingBox.remove();
     }
 
+    // Need at least 2 locations to build a route
     if (!locs || locs.length < 2) {
         return;
     }
@@ -44,6 +56,7 @@ function updateDayRoute(day, locs) {
         show: false // hide built-in instruction panel
     }).addTo(map);
 
+    // When route is found, build directions box
     dayRoutes[day].on('routesfound', function(e) {
         const instructions = e.routes[0].instructions;
 
@@ -57,14 +70,17 @@ function updateDayRoute(day, locs) {
         });
 
         const container = document.getElementById("directionsContent");
+
+        // Insert in strict Day 1–Day 7 order
         const index = dayOrder.indexOf(day);
         const existingBoxes = Array.from(container.querySelectorAll(".directionBox"));
 
-        // Insert in strict Day 1–Day 7 order
         let inserted = false;
+
         for (const b of existingBoxes) {
             const bDay = b.id.replace("dir-", "");
             const bIndex = dayOrder.indexOf(bDay);
+
             if (bIndex > index) {
                 container.insertBefore(box, b);
                 inserted = true;
