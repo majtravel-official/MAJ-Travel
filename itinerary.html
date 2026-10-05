@@ -5,6 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MAJ Travel – Build Your Itinerary</title>
     <link rel="stylesheet" href="style.css">
+
+    <!-- Leaflet (FREE MAPS) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <!-- Leaflet Routing Machine (FREE ROUTE PREVIEW) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+    </style>
 </head>
 
 <body>
@@ -62,10 +79,43 @@
         <p>© MAJ Travel – Coach-Friendly Itinerary Builder</p>
     </footer>
 
+    <!-- SCRIPTS -->
     <script src="script.js"></script>
     <script src="travel-time.js"></script>
-    <script src="maps.js"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>
+
+    <script>
+        let map;
+        let routeControl;
+
+        // Initialise FREE Leaflet Map
+        function initMap() {
+            map = L.map('map').setView([53.4808, -2.2426], 7); // Default: Manchester
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '© OpenStreetMap'
+            }).addTo(map);
+        }
+
+        // Draw route using Leaflet Routing Machine
+        function updateRoute(locations) {
+            if (routeControl) {
+                map.removeControl(routeControl);
+            }
+
+            if (locations.length < 2) return;
+
+            routeControl = L.Routing.control({
+                waypoints: locations.map(loc => L.latLng(loc.lat, loc.lng)),
+                routeWhileDragging: false,
+                showAlternatives: false,
+                addWaypoints: false
+            }).addTo(map);
+        }
+
+        // Start map when page loads
+        window.onload = initMap;
+    </script>
 
 </body>
 </html>
