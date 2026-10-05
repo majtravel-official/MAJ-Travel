@@ -23,16 +23,20 @@ function updateDayRoute(day, locs) {
         routeWhileDragging: false,
         draggableWaypoints: false,
         addWaypoints: false,
-        show: true
+        show: false   // ⭐ DO NOT SHOW IN MAP
     }).addTo(map);
 
-    // ⭐ MOVE ALL ROUTING PANELS INTO SCROLL WRAPPER
-    setTimeout(() => {
-        const wrapper = document.getElementById("routeScrollWrapper");
-        const panels = document.querySelectorAll(".leaflet-routing-container");
+    dayRoutes[day].on('routesfound', function(e) {
+        const instructions = e.routes[0].instructions;
 
-        panels.forEach(panel => {
-            wrapper.appendChild(panel);
+        const box = document.createElement("div");
+        box.className = "directionBox";
+        box.innerHTML = `<h3>${day.toUpperCase()}</h3>`;
+
+        instructions.forEach(i => {
+            box.innerHTML += `<p>${i.text}</p>`;
         });
-    }, 200);
+
+        document.getElementById("directionsContent").appendChild(box);
+    });
 }
