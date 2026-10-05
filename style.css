@@ -17,23 +17,21 @@ h1 {
 #board {
     display: flex;
     overflow-x: auto;
-    gap: 15px;
-    padding: 20px;
-    scroll-snap-type: x mandatory;
+    gap: 10px;
+    padding: 10px;
 }
 
 .dayColumn {
     background: white;
     border-radius: 10px;
     padding: 10px;
-    min-width: 220px;
-    max-width: 220px;
-    scroll-snap-align: start;
+    min-width: 160px;   /* smaller columns */
+    max-width: 160px;   /* fits all 7 days */
     box-shadow: 0 0 5px rgba(0,0,0,0.2);
 }
 
 .sortable {
-    min-height: 80px;
+    min-height: 60px;
     padding: 5px;
     border: 2px dashed #ccc;
     border-radius: 6px;
