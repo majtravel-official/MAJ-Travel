@@ -109,3 +109,43 @@ li {
     font-size: 14px;
     color: #333;
 }
+/* -----------------------------------------
+   MAJ TRAVEL THEME
+----------------------------------------- */
+:root {
+    --maj-gold: #d4af37;
+    --maj-dark: #222;
+    --maj-light: #f7f7f7;
+    --maj-card: #ffffff;
+}
+
+body {
+    background: var(--maj-light);
+    color: var(--maj-dark);
+}
+
+header,
+nav {
+    background: var(--maj-dark);
+    color: #fff;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 10px;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: var(--maj-gold);
+}
+
+.main-card {
+    max-width: 900px;
+    margin: 0 auto;
+    background: var(--maj-card);
+    border-radius: 10px;
+    padding: 20px;
+    border: 1px solid #ddd;
+}
