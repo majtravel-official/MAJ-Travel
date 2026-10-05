@@ -14,8 +14,8 @@ function addStop() {
     const li = document.createElement("li");
 
     li.innerHTML = `
-        <span>${name}</span>
-        <span class="drag-hint">⇅ drag</span>
+        <span class="stop-name">${name}</span>
+        <span class="drag-hint">⇅</span>
         <button class="delete-btn" onclick="deleteStop('${name}', '${day}', this)">✖</button>
     `;
 
@@ -57,6 +57,11 @@ document.querySelectorAll(".sortable").forEach(list => {
     Sortable.create(list, {
         group: "days",
         animation: 150,
+        fallbackOnBody: true,
+        swapThreshold: 0.65,
+        dragClass: "dragging",
+        ghostClass: "ghost",
+        forceFallback: true,
         onEnd: function () {
             rebuildStopsFromUI();
             updateAllRoutes();
@@ -71,7 +76,7 @@ function rebuildStopsFromUI() {
 
         const items = document.querySelectorAll(`#${key}List li`);
         items.forEach(li => {
-            const name = li.querySelector("span").innerText;
+            const name = li.querySelector(".stop-name").innerText;
             stops[key].push(name);
         });
     }
