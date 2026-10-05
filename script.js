@@ -55,13 +55,11 @@ function clearAll() {
 
 document.querySelectorAll(".sortable").forEach(list => {
     Sortable.create(list, {
-        group: "days",
+        group: "days",          // shared group for cross‑column drag
         animation: 150,
-        fallbackOnBody: true,
-        swapThreshold: 0.65,
-        dragClass: "dragging",
+        draggable: "li",        // whole card is draggable
         ghostClass: "ghost",
-        forceFallback: true,
+        dragClass: "dragging",
         onEnd: function () {
             rebuildStopsFromUI();
             updateAllRoutes();
@@ -83,13 +81,15 @@ function rebuildStopsFromUI() {
 }
 
 function updateAllRoutes() {
+    // clear directions before rebuilding
     document.getElementById("directionsContent").innerHTML = "";
 
-    for (let d = 1; d <= 7; d++) {
-        const key = `day${d}`;
+    const dayOrder = ["day1","day2","day3","day4","day5","day6","day7"];
+
+    dayOrder.forEach(key => {
         const locs = stops[key].map(name => coordinates[name]).filter(Boolean);
         updateDayRoute(key, locs);
-    }
+    });
 }
 
 function deleteStop(name, day, element) {
