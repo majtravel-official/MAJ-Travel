@@ -2,46 +2,30 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MAJ Travel – Printable Itinerary</title>
+    <title>MAJ Travel – Print Itinerary</title>
     <link rel="stylesheet" href="style.css">
+    <script src="print.js" defer></script>
 </head>
-
 <body>
+<header class="main-header print-header">
+    <img src="img/Logo 01.jpg" alt="MAJ Travel Logo" class="maj-logo">
+    <h1>Print Itinerary</h1>
+</header>
 
-    <!-- HEADER -->
-    <header>
-        <h1>MAJ Travel – Printable Itinerary</h1>
-    </header>
+<main class="content print-content">
+    <section>
+        <h2 id="printTripName"></h2>
+        <p><strong>Start date:</strong> <span id="printTripStart"></span></p>
+    </section>
 
-    <!-- NAVIGATION -->
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="itinerary.html">Build Itinerary</a>
-        <a href="print.html">Print</a>
-        <a href="about.html">About</a>
-    </nav>
+    <section id="printDaysContainer"></section>
 
-    <!-- MAIN CONTENT -->
-    <div class="main-card">
-        <h2>Your Itinerary (Print Version)</h2>
+    <button onclick="window.print()">Print</button>
+    <button onclick="window.location.href='itinerary.html'">Back to Builder</button>
+</main>
 
-        <p>This page shows a clean, text‑only version of your itinerary. Use the button below to download a PDF.</p>
-
-        <button id="pdfBtn">Download PDF</button>
-
-        <hr>
-
-        <div id="printArea"></div>
-    </div>
-
-    <!-- FOOTER -->
-    <footer>
-        <p>© MAJ Travel – Coach-Friendly Itinerary Builder</p>
-    </footer>
-
-    <script src="print.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
+<footer class="main-footer">
+    <p>© MAJ Travel</p>
+</footer>
 </body>
 </html>
