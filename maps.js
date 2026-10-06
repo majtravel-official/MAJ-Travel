@@ -24,7 +24,7 @@ function calculateTotalTravelMinutes(stops) {
         return sum + toNumber(stop.travelMinutes);
     }, 0);
 }
-
+ 
 /**
  * Calculate total distance (miles) for a day.
  * Expects an array of stops with stop.distanceMiles.
