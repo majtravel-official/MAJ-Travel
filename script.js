@@ -16,7 +16,7 @@ function loadItinerary() {
 function saveItinerary(data) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
-
+ 
 document.addEventListener('DOMContentLoaded', () => {
     const tripNameInput = document.getElementById('tripName');
     const tripStartInput = document.getElementById('tripStart');
