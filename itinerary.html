@@ -2,73 +2,95 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>MAJ Travel – Itinerary Builder</title>
+    <title>MAJ Travel – Build Your Itinerary</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
 
-    <link rel="stylesheet" href="style.css?v=3">
-
-    <!-- Leaflet -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-    <!-- Leaflet Routing Machine -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
-    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
-
-    <!-- SortableJS -->
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+    <!-- Leaflet CSS for map -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4Qj6ZpJQp8zN2zN2zLk52I7Di3KkM3Cw/dwZ0pniCk="
+        crossorigin=""
+    />
 </head>
-
-<body>
-
-<header class="header">
-    <div class="header-inner">
-        <img src="img/majtravel-logo.png" alt="MAJ Travel Logo" class="logo-large">
-        <h1 class="header-title">MAJ Travel – Itinerary Builder</h1>
-        <div class="header-accent"></div>
+<body class="maj-premium">
+<header class="maj-header">
+    <div class="maj-header-inner">
+        <img src="img/majtravel-logo.png" alt="MAJ Travel Logo" class="maj-logo">
+        <div class="maj-header-text">
+            <h1>Itinerary Builder</h1>
+            <p>Plan routes, stops and timings with map visualisation.</p>
+        </div>
     </div>
+    <div class="maj-header-gold-line"></div>
 </header>
 
-<section id="controls">
-    <input id="stopInput" placeholder="Enter destination">
-    <select id="daySelect">
-        <option value="day1">Day 1</option>
-        <option value="day2">Day 2</option>
-        <option value="day3">Day 3</option>
-        <option value="day4">Day 4</option>
-        <option value="day5">Day 5</option>
-        <option value="day6">Day 6</option>
-        <option value="day7">Day 7</option>
-    </select>
-    <button onclick="addStop()">Add Stop</button>
-</section>
+<main class="maj-main maj-main-grid">
+    <!-- Left: itinerary form and drag/drop -->
+    <section class="maj-panel maj-panel-scroll">
+        <h2>Trip details</h2>
+        <div class="maj-form-group">
+            <label for="tripName">Trip name</label>
+            <input type="text" id="tripName" placeholder="e.g. Weymouth & Portland Coastal Explorer">
+        </div>
 
-<section id="board">
-    <div class="dayColumn"><h2>Day 1</h2><ul id="day1List" class="sortable"></ul></div>
-    <div class="dayColumn"><h2>Day 2</h2><ul id="day2List" class="sortable"></ul></div>
-    <div class="dayColumn"><h2>Day 3</h2><ul id="day3List" class="sortable"></ul></div>
-    <div class="dayColumn"><h2>Day 4</h2><ul id="day4List" class="sortable"></ul></div>
-    <div class="dayColumn"><h2>Day 5</h2><ul id="day5List" class="sortable"></ul></div>
-    <div class="dayColumn"><h2>Day 6</h2><ul id="day6List" class="sortable"></ul></div>
-    <div class="dayColumn"><h2>Day 7</h2><ul id="day7List" class="sortable"></ul></div>
-</section>
+        <div class="maj-form-group">
+            <label for="tripDate">Start date</label>
+            <input type="date" id="tripDate">
+        </div>
 
-<div id="map"></div>
+        <div class="maj-form-group">
+            <label for="tripNotes">Notes</label>
+            <textarea id="tripNotes" rows="3" placeholder="Key notes, coach constraints, comfort stops, etc."></textarea>
+        </div>
 
-<section id="directionsArea">
-    <h2 class="directions-title">Route Directions</h2>
-    <div id="directionsContent"></div>
-</section>
+        <h3>Days & stops (drag to reorder)</h3>
+        <div id="daysContainer" class="maj-days-container">
+            <!-- Day templates will be injected by JS -->
+        </div>
 
-<section id="bottomButtons">
-    <button onclick="downloadItinerary()">Download Itinerary</button>
-    <button onclick="clearAll()">Clear All</button>
-    <button onclick="resetMap()">Reset Map</button>
-    <a href="index.html" class="home-button">Return to Homepage</a>
-</section>
+        <button id="addDayBtn" class="maj-btn maj-btn-secondary">Add day</button>
+    </section>
 
-<script src="travel-time.js"></script>
-<script src="maps.js"></script>
+    <!-- Right: map + controls -->
+    <section class="maj-panel">
+        <h2>Route map</h2>
+        <div id="map" class="maj-map"></div>
+
+        <div class="maj-form-group">
+            <label for="routeColour">Route colour</label>
+            <select id="routeColour">
+                <option value="#C9A86A">Gold (default)</option>
+                <option value="#1E90FF">Blue</option>
+                <option value="#32CD32">Green</option>
+                <option value="#FF4500">Orange/Red</option>
+            </select>
+        </div>
+
+        <div class="maj-button-row">
+            <button id="updateMapBtn" class="maj-btn maj-btn-primary">Update map</button>
+            <button id="downloadBtn" class="maj-btn maj-btn-outline">Download itinerary (JSON)</button>
+            <button id="printBtn" class="maj-btn maj-btn-outline">Print itinerary</button>
+            <button id="clearBtn" class="maj-btn maj-btn-danger">Clear all</button>
+        </div>
+    </section>
+</main>
+
+<footer class="maj-footer">
+    <p>© <span id="year"></span> MAJ Travel · contactmaj2025@gmail.com</p>
+</footer>
+
+<!-- Leaflet JS -->
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-o9N1j7kGStb6QpGpG8JwYqKqRR3v0v+WQ1p5v9v+3zU="
+    crossorigin=""
+></script>
+
 <script src="script.js"></script>
-
+<script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+</script>
 </body>
 </html>
