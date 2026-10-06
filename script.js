@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Only run on itinerary page
     if (!daysContainer) return;
-
+ 
     initDays(daysContainer);
     initMap();
 
