@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const downloadBtn = document.getElementById("downloadBtn");
     const printBtn = document.getElementById("printBtn");
     const clearBtn = document.getElementById("clearBtn");
-
+ 
     if (daysContainer) {
         initDays(daysContainer);
         initMap();
