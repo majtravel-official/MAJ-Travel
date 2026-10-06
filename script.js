@@ -1,139 +1,353 @@
-// ===============================
-//   DATA STRUCTURES
-// ===============================
+// Basic data model
+let days = [];
+let map;
+let routeLayerGroup;
 
-let stops = {
-    day1: [], day2: [], day3: [],
-    day4: [], day5: [], day6: [], day7: []
-};
+// Initialise on itinerary page
+document.addEventListener("DOMContentLoaded", () => {
+    const daysContainer = document.getElementById("daysContainer");
+    const addDayBtn = document.getElementById("addDayBtn");
+    const updateMapBtn = document.getElementById("updateMapBtn");
+    const downloadBtn = document.getElementById("downloadBtn");
+    const printBtn = document.getElementById("printBtn");
+    const clearBtn = document.getElementById("clearBtn");
 
-let coordinates = {}; // name -> {lat, lng}
-
-
-// ===============================
-//   ADD STOP
-// ===============================
-
-function addStop() {
-    const name = document.getElementById("stopInput").value.trim();
-    const day = document.getElementById("daySelect").value;
-
-    if (!name) {
-        alert("Enter a destination");
-        return;
+    if (daysContainer) {
+        initDays(daysContainer);
+        initMap();
+        addDayBtn.addEventListener("click", () => addDay(daysContainer));
+        updateMapBtn.addEventListener("click", updateMapFromDays);
+        downloadBtn.addEventListener("click", downloadItinerary);
+        printBtn.addEventListener("click", () => window.print());
+        clearBtn.addEventListener("click", () => clearAll(daysContainer));
     }
+});
 
-    // Create card
-    const li = document.createElement("li");
-    li.innerHTML = `
-        <span class="stop-name">${name}</span>
-        <span class="drag-hint">⇅</span>
-        <button class="delete-btn" onclick="deleteStop('${name}', '${day}', this)">✖</button>
-    `;
-    li.dataset.day = day;
+// ----- Days & stops -----
 
-    // Add to UI
-    document.getElementById(day + "List").appendChild(li);
+function initDays(container) {
+    // Start with one default day
+    days = [];
+    addDay(container);
+}
 
-    // Add to data
-    stops[day].push(name);
+function addDay(container) {
+    const dayIndex = days.length;
+    const day = {
+        id: Date.now() + "-" + dayIndex,
+        name: `Day ${dayIndex + 1}`,
+        stops: [
+            { id: `${dayIndex}-stop-1`, name: "" },
+            { id: `${dayIndex}-stop-2`, name: "" }
+        ]
+    };
+    days.push(day);
+    renderDays(container);
+}
 
-    // If coordinates already known, update routes immediately
-    if (coordinates[name]) {
-        updateAllRoutes();
-        document.getElementById("stopInput").value = "";
-        return;
-    }
+function removeDay(dayId, container) {
+    days = days.filter(d => d.id !== dayId);
+    renderDays(container);
+}
 
-    // Otherwise fetch coordinates
-    getCoordinates(name, coords => {
-        if (!coords) {
-            alert("Could not find location: " + name);
-            return;
-        }
-        coordinates[name] = coords;
-        updateAllRoutes();
+function addStop(dayId, container) {
+    const day = days.find(d => d.id === dayId);
+    if (!day) return;
+    const stopIndex = day.stops.length + 1;
+    day.stops.push({
+        id: `${dayId}-stop-${stopIndex}`,
+        name: ""
     });
-
-    document.getElementById("stopInput").value = "";
+    renderDays(container);
 }
 
-
-// ===============================
-//   CLEAR ALL
-// ===============================
-
-function clearAll() {
-    for (let d = 1; d <= 7; d++) {
-        const key = `day${d}`;
-        stops[key] = [];
-        document.getElementById(key + "List").innerHTML = "";
-    }
-    document.getElementById("directionsContent").innerHTML = "";
+function removeStop(dayId, stopId, container) {
+    const day = days.find(d => d.id === dayId);
+    if (!day) return;
+    day.stops = day.stops.filter(s => s.id !== stopId);
+    renderDays(container);
 }
 
-
-// ===============================
-//   REBUILD STOPS FROM UI
-// ===============================
-
-function rebuildStopsFromUI() {
-    for (let d = 1; d <= 7; d++) {
-        const key = `day${d}`;
-        stops[key] = [];
-        const items = document.querySelectorAll(`#${key}List li`);
-        items.forEach(li => {
-            const name = li.querySelector(".stop-name").innerText;
-            stops[key].push(name);
-        });
-    }
-}
-
-
-// ===============================
-//   UPDATE ALL ROUTES
-// ===============================
-
-function updateAllRoutes() {
-    const container = document.getElementById("directionsContent");
+function renderDays(container) {
     container.innerHTML = "";
 
-    const dayOrder = ["day1","day2","day3","day4","day5","day6","day7"];
+    days.forEach((day, dayIndex) => {
+        const dayEl = document.createElement("div");
+        dayEl.className = "maj-day";
+        dayEl.dataset.dayId = day.id;
+        dayEl.draggable = true;
 
-    dayOrder.forEach(key => {
-        const locs = stops[key]
-            .map(name => coordinates[name])
-            .filter(Boolean);
-        updateDayRoute(key, locs);
+        const header = document.createElement("div");
+        header.className = "maj-day-header";
+
+        const title = document.createElement("span");
+        title.className = "maj-day-title";
+        title.textContent = day.name;
+
+        const controls = document.createElement("div");
+
+        const handle = document.createElement("span");
+        handle.className = "maj-day-handle";
+        handle.textContent = "⇅";
+        handle.title = "Drag to reorder day";
+
+        const removeBtn = document.createElement("button");
+        removeBtn.type = "button";
+        removeBtn.className = "maj-btn maj-btn-outline";
+        removeBtn.textContent = "Remove day";
+        removeBtn.addEventListener("click", () => removeDay(day.id, container));
+
+        controls.appendChild(handle);
+        controls.appendChild(removeBtn);
+
+        header.appendChild(title);
+        header.appendChild(controls);
+
+        const stopsList = document.createElement("ul");
+        stopsList.className = "maj-stops-list";
+        stopsList.dataset.dayId = day.id;
+
+        day.stops.forEach(stop => {
+            const li = document.createElement("li");
+            li.className = "maj-stop";
+            li.dataset.stopId = stop.id;
+            li.draggable = true;
+
+            const handleStop = document.createElement("span");
+            handleStop.className = "maj-stop-handle";
+            handleStop.textContent = "⋮⋮";
+            handleStop.title = "Drag to reorder stop";
+
+            const input = document.createElement("input");
+            input.type = "text";
+            input.placeholder = "Stop name (town, venue, service area)";
+            input.value = stop.name;
+            input.addEventListener("input", e => {
+                stop.name = e.target.value;
+            });
+
+            const removeStopBtn = document.createElement("span");
+            removeStopBtn.className = "maj-stop-remove";
+            removeStopBtn.textContent = "✕";
+            removeStopBtn.title = "Remove stop";
+            removeStopBtn.addEventListener("click", () =>
+                removeStop(day.id, stop.id, container)
+            );
+
+            li.appendChild(handleStop);
+            li.appendChild(input);
+            li.appendChild(removeStopBtn);
+            stopsList.appendChild(li);
+        });
+
+        const addStopBtn = document.createElement("button");
+        addStopBtn.type = "button";
+        addStopBtn.className = "maj-btn maj-btn-secondary";
+        addStopBtn.textContent = "Add stop";
+        addStopBtn.addEventListener("click", () => addStop(day.id, container));
+
+        dayEl.appendChild(header);
+        dayEl.appendChild(stopsList);
+        dayEl.appendChild(addStopBtn);
+
+        container.appendChild(dayEl);
     });
+
+    attachDragDrop(container);
 }
 
+// ----- Drag & drop (days + stops) -----
 
-// ===============================
-//   DELETE STOP
-// ===============================
+function attachDragDrop(container) {
+    // Days drag/drop
+    const dayEls = Array.from(container.querySelectorAll(".maj-day"));
+    let draggedDay = null;
 
-function deleteStop(name, day, element) {
-    stops[day] = stops[day].filter(n => n !== name);
-    element.parentElement.remove();
-    updateAllRoutes();
+    dayEls.forEach(dayEl => {
+        dayEl.addEventListener("dragstart", () => {
+            draggedDay = dayEl;
+            dayEl.style.opacity = "0.5";
+        });
+
+        dayEl.addEventListener("dragend", () => {
+            dayEl.style.opacity = "1";
+            draggedDay = null;
+        });
+
+        dayEl.addEventListener("dragover", e => {
+            e.preventDefault();
+            const bounding = dayEl.getBoundingClientRect();
+            const offset = e.clientY - bounding.top;
+            const parent = dayEl.parentNode;
+            if (offset > bounding.height / 2) {
+                parent.insertBefore(draggedDay, dayEl.nextSibling);
+            } else {
+                parent.insertBefore(draggedDay, dayEl);
+            }
+        });
+    });
+
+    // Stops drag/drop within each day
+    const stopLists = Array.from(container.querySelectorAll(".maj-stops-list"));
+    stopLists.forEach(list => {
+        let draggedStop = null;
+
+        const stopEls = Array.from(list.querySelectorAll(".maj-stop"));
+        stopEls.forEach(stopEl => {
+            stopEl.addEventListener("dragstart", () => {
+                draggedStop = stopEl;
+                stopEl.style.opacity = "0.5";
+            });
+
+            stopEl.addEventListener("dragend", () => {
+                stopEl.style.opacity = "1";
+                draggedStop = null;
+                syncStopsFromDOM(list);
+            });
+
+            stopEl.addEventListener("dragover", e => {
+                e.preventDefault();
+                const bounding = stopEl.getBoundingClientRect();
+                const offset = e.clientY - bounding.top;
+                const parent = stopEl.parentNode;
+                if (offset > bounding.height / 2) {
+                    parent.insertBefore(draggedStop, stopEl.nextSibling);
+                } else {
+                    parent.insertBefore(draggedStop, stopEl);
+                }
+            });
+        });
+    });
+
+    // After reordering days in DOM, sync back to data model
+    syncDaysFromDOM(container);
 }
 
+function syncDaysFromDOM(container) {
+    const dayEls = Array.from(container.querySelectorAll(".maj-day"));
+    const newDaysOrder = [];
+    dayEls.forEach(dayEl => {
+        const dayId = dayEl.dataset.dayId;
+        const existing = days.find(d => d.id === dayId);
+        if (existing) newDaysOrder.push(existing);
+    });
+    days = newDaysOrder;
+}
 
-// ===============================
-//   SORTABLEJS SETUP
-// ===============================
+function syncStopsFromDOM(list) {
+    const dayId = list.dataset.dayId;
+    const day = days.find(d => d.id === dayId);
+    if (!day) return;
 
-document.querySelectorAll(".sortable").forEach(list => {
-    Sortable.create(list, {
-        group: "days",
-        animation: 150,
-        draggable: "li",
-        ghostClass: "ghost",
-        dragClass: "dragging",
-        onEnd: function () {
-            rebuildStopsFromUI();
-            updateAllRoutes();
+    const stopEls = Array.from(list.querySelectorAll(".maj-stop"));
+    const newStops = [];
+    stopEls.forEach(stopEl => {
+        const stopId = stopEl.dataset.stopId;
+        const input = stopEl.querySelector("input[type='text']");
+        newStops.push({
+            id: stopId,
+            name: input ? input.value : ""
+        });
+    });
+    day.stops = newStops;
+}
+
+// ----- Map & routes -----
+
+function initMap() {
+    const mapEl = document.getElementById("map");
+    if (!mapEl) return;
+
+    map = L.map("map").setView([52.5, -1.5], 6); // UK-ish centre
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 18,
+        attribution: "© OpenStreetMap contributors"
+    }).addTo(map);
+
+    routeLayerGroup = L.layerGroup().addTo(map);
+}
+
+function updateMapFromDays() {
+    if (!map || !routeLayerGroup) return;
+
+    routeLayerGroup.clearLayers();
+
+    const colourSelect = document.getElementById("routeColour");
+    const colour = colourSelect ? colourSelect.value : "#C9A86A";
+
+    // For now, we simulate coordinates for each stop so the map is operational.
+    // Later you can replace this with real geocoding.
+    const allCoords = [];
+
+    days.forEach((day, dayIndex) => {
+        const dayCoords = [];
+        day.stops.forEach((stop, stopIndex) => {
+            // Simple fake coordinate generator based on indices
+            const lat = 50 + dayIndex * 0.5 + stopIndex * 0.2;
+            const lng = -2 + dayIndex * 0.3 + stopIndex * 0.15;
+            dayCoords.push([lat, lng]);
+
+            const marker = L.circleMarker([lat, lng], {
+                radius: 5,
+                color: colour,
+                fillColor: colour,
+                fillOpacity: 0.9
+            }).addTo(routeLayerGroup);
+
+            marker.bindPopup(
+                `<strong>${day.name}</strong><br>${stop.name || "Unnamed stop"}`
+            );
+        });
+
+        if (dayCoords.length > 1) {
+            const polyline = L.polyline(dayCoords, {
+                color: colour,
+                weight: 4,
+                opacity: 0.9
+            }).addTo(routeLayerGroup);
+            allCoords.push(...dayCoords);
+        } else if (dayCoords.length === 1) {
+            allCoords.push(dayCoords[0]);
         }
     });
-});
+
+    if (allCoords.length > 0) {
+        const bounds = L.latLngBounds(allCoords);
+        map.fitBounds(bounds, { padding: [20, 20] });
+    }
+}
+
+// ----- Download / clear -----
+
+function downloadItinerary() {
+    const tripName = document.getElementById("tripName")?.value || "";
+    const tripDate = document.getElementById("tripDate")?.value || "";
+    const tripNotes = document.getElementById("tripNotes")?.value || "";
+
+    const data = {
+        tripName,
+        tripDate,
+        tripNotes,
+        days
+    };
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+        type: "application/json"
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = (tripName || "itinerary") + ".json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+function clearAll(container) {
+    if (!confirm("Clear all itinerary data?")) return;
+    days = [];
+    initDays(container);
+    if (routeLayerGroup) routeLayerGroup.clearLayers();
+}
