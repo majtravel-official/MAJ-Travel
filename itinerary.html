@@ -5,13 +5,11 @@
     <title>MAJ Travel – Build Your Itinerary</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="style.css">
- 
-    <!-- Leaflet CSS for map -->
+
+    <!-- Leaflet CSS (no integrity to avoid mismatch issues) -->
     <link
         rel="stylesheet"
         href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4Qj6ZpJQp8zN2zN2zLk52I7Di3KkM3Cw/dwZ0pniCk="
-        crossorigin=""
     />
 </head>
 <body class="maj-premium">
@@ -46,9 +44,7 @@
         </div>
 
         <h3>Days & stops (drag to reorder)</h3>
-        <div id="daysContainer" class="maj-days-container">
-            <!-- Day templates will be injected by JS -->
-        </div>
+        <div id="daysContainer" class="maj-days-container"></div>
 
         <button id="addDayBtn" class="maj-btn maj-btn-secondary">Add day</button>
     </section>
@@ -81,13 +77,10 @@
     <p>© <span id="year"></span> MAJ Travel · contactmaj2025@gmail.com</p>
 </footer>
 
-<!-- Leaflet JS -->
-<script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-o9N1j7kGStb6QpGpG8JwYqKqRR3v0v+WQ1p5v9v+3zU="
-    crossorigin=""
-></script>
+<!-- Leaflet JS (no integrity to avoid blocking) -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
+<!-- Your app logic -->
 <script src="script.js"></script>
 <script>
     document.getElementById('year').textContent = new Date().getFullYear();
