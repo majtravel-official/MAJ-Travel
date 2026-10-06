@@ -3,47 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <title>MAJ Travel – Home</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="maj-premium">
-<header class="maj-header">
-    <div class="maj-header-inner">
-        <img src="img/majtravel-logo.png" alt="MAJ Travel Logo" class="maj-logo">
-        <div class="maj-header-text">
-            <h1>MAJ Travel</h1>
-            <p>Crafted Journeys, Delivered Professionally</p>
-        </div>
-    </div>
-    <div class="maj-header-gold-line"></div>
+<body>
+<header class="main-header">
+    <img src="img/Logo 01.jpg" alt="MAJ Travel Logo" class="maj-logo">
+    <h1>MAJ Travel</h1>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="itinerary.html">Build Your Itinerary</a>
+        <a href="about.html">About</a>
+        <a href="print.html">Print View</a>
+    </nav>
 </header>
- 
-<main class="maj-main">
-    <section class="maj-panel">
-        <h2>Welcome to MAJ Travel</h2>
-        <p>Build, visualise and export your coach itineraries with our interactive planner.</p>
-        <div class="maj-button-row">
-            <a href="itinerary.html" class="maj-btn maj-btn-primary">Open Itinerary Builder</a>
-        </div>
-    </section>
 
-    <section class="maj-panel">
-        <h3>How it works</h3>
-        <ol class="maj-list">
-            <li>Enter your trip details and stops.</li>
-            <li>Drag and drop to reorder days and stops.</li>
-            <li>View the route on the map with coloured segments.</li>
-            <li>Download, print or clear the itinerary when ready.</li>
-        </ol>
+<main class="content">
+    <section>
+        <h2>Welcome to MAJ Travel</h2>
+        <p>Create, refine, and print structured itineraries for your coach tours and trips.</p>
+        <p>Use the “Build Your Itinerary” page to add days, stops, timings, and notes.</p>
     </section>
 </main>
 
-<footer class="maj-footer">
-    <p>© <span id="year"></span> MAJ Travel · contactmaj2025@gmail.com</p>
+<footer class="main-footer">
+    <p>© MAJ Travel</p>
 </footer>
-
-<script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-</script>
 </body>
 </html>
