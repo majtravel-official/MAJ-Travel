@@ -1,9 +1,8 @@
-// Basic data model
+// Global data model
 let days = [];
 let map;
 let routeLayerGroup;
 
-// Initialise on itinerary page
 document.addEventListener("DOMContentLoaded", () => {
     const daysContainer = document.getElementById("daysContainer");
     const addDayBtn = document.getElementById("addDayBtn");
@@ -11,22 +10,23 @@ document.addEventListener("DOMContentLoaded", () => {
     const downloadBtn = document.getElementById("downloadBtn");
     const printBtn = document.getElementById("printBtn");
     const clearBtn = document.getElementById("clearBtn");
- 
-    if (daysContainer) {
-        initDays(daysContainer);
-        initMap();
-        addDayBtn.addEventListener("click", () => addDay(daysContainer));
-        updateMapBtn.addEventListener("click", updateMapFromDays);
-        downloadBtn.addEventListener("click", downloadItinerary);
-        printBtn.addEventListener("click", () => window.print());
-        clearBtn.addEventListener("click", () => clearAll(daysContainer));
-    }
+
+    // Only run on itinerary page
+    if (!daysContainer) return;
+
+    initDays(daysContainer);
+    initMap();
+
+    addDayBtn.addEventListener("click", () => addDay(daysContainer));
+    updateMapBtn.addEventListener("click", updateMapFromDays);
+    downloadBtn.addEventListener("click", downloadItinerary);
+    printBtn.addEventListener("click", () => window.print());
+    clearBtn.addEventListener("click", () => clearAll(daysContainer));
 });
 
 // ----- Days & stops -----
 
 function initDays(container) {
-    // Start with one default day
     days = [];
     addDay(container);
 }
@@ -34,11 +34,11 @@ function initDays(container) {
 function addDay(container) {
     const dayIndex = days.length;
     const day = {
-        id: Date.now() + "-" + dayIndex,
+        id: "day-" + (Date.now() + "-" + dayIndex),
         name: `Day ${dayIndex + 1}`,
         stops: [
-            { id: `${dayIndex}-stop-1`, name: "" },
-            { id: `${dayIndex}-stop-2`, name: "" }
+            { id: `stop-${dayIndex}-1`, name: "" },
+            { id: `stop-${dayIndex}-2`, name: "" }
         ]
     };
     days.push(day);
@@ -55,7 +55,7 @@ function addStop(dayId, container) {
     if (!day) return;
     const stopIndex = day.stops.length + 1;
     day.stops.push({
-        id: `${dayId}-stop-${stopIndex}`,
+        id: `stop-${dayId}-${stopIndex}`,
         name: ""
     });
     renderDays(container);
@@ -71,7 +71,7 @@ function removeStop(dayId, stopId, container) {
 function renderDays(container) {
     container.innerHTML = "";
 
-    days.forEach((day, dayIndex) => {
+    days.forEach(day => {
         const dayEl = document.createElement("div");
         dayEl.className = "maj-day";
         dayEl.dataset.dayId = day.id;
@@ -156,10 +156,10 @@ function renderDays(container) {
     attachDragDrop(container);
 }
 
-// ----- Drag & drop (days + stops) -----
+// ----- Drag & drop -----
 
 function attachDragDrop(container) {
-    // Days drag/drop
+    // Days
     const dayEls = Array.from(container.querySelectorAll(".maj-day"));
     let draggedDay = null;
 
@@ -172,10 +172,12 @@ function attachDragDrop(container) {
         dayEl.addEventListener("dragend", () => {
             dayEl.style.opacity = "1";
             draggedDay = null;
+            syncDaysFromDOM(container);
         });
 
         dayEl.addEventListener("dragover", e => {
             e.preventDefault();
+            if (!draggedDay) return;
             const bounding = dayEl.getBoundingClientRect();
             const offset = e.clientY - bounding.top;
             const parent = dayEl.parentNode;
@@ -187,7 +189,7 @@ function attachDragDrop(container) {
         });
     });
 
-    // Stops drag/drop within each day
+    // Stops
     const stopLists = Array.from(container.querySelectorAll(".maj-stops-list"));
     stopLists.forEach(list => {
         let draggedStop = null;
@@ -207,6 +209,7 @@ function attachDragDrop(container) {
 
             stopEl.addEventListener("dragover", e => {
                 e.preventDefault();
+                if (!draggedStop) return;
                 const bounding = stopEl.getBoundingClientRect();
                 const offset = e.clientY - bounding.top;
                 const parent = stopEl.parentNode;
@@ -218,9 +221,6 @@ function attachDragDrop(container) {
             });
         });
     });
-
-    // After reordering days in DOM, sync back to data model
-    syncDaysFromDOM(container);
 }
 
 function syncDaysFromDOM(container) {
@@ -257,8 +257,12 @@ function syncStopsFromDOM(list) {
 function initMap() {
     const mapEl = document.getElementById("map");
     if (!mapEl) return;
+    if (typeof L === "undefined") {
+        console.error("Leaflet (L) is not loaded.");
+        return;
+    }
 
-    map = L.map("map").setView([52.5, -1.5], 6); // UK-ish centre
+    map = L.map("map").setView([52.5, -1.5], 6);
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         maxZoom: 18,
@@ -276,14 +280,11 @@ function updateMapFromDays() {
     const colourSelect = document.getElementById("routeColour");
     const colour = colourSelect ? colourSelect.value : "#C9A86A";
 
-    // For now, we simulate coordinates for each stop so the map is operational.
-    // Later you can replace this with real geocoding.
     const allCoords = [];
 
     days.forEach((day, dayIndex) => {
         const dayCoords = [];
         day.stops.forEach((stop, stopIndex) => {
-            // Simple fake coordinate generator based on indices
             const lat = 50 + dayIndex * 0.5 + stopIndex * 0.2;
             const lng = -2 + dayIndex * 0.3 + stopIndex * 0.15;
             dayCoords.push([lat, lng]);
