@@ -3,87 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <title>MAJ Travel – Build Your Itinerary</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="style.css">
- 
-    <!-- Leaflet CSS (no integrity to avoid mismatch issues) -->
-    <link
-        rel="stylesheet"
-        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    />
+    <script src="script.js" defer></script>
+    <script src="maps.js" defer></script>
 </head>
-<body class="maj-premium">
-<header class="maj-header">
-    <div class="maj-header-inner">
-        <img src="img/majtravel-logo.png" alt="MAJ Travel Logo" class="maj-logo">
-        <div class="maj-header-text">
-            <h1>Itinerary Builder</h1>
-            <p>Plan routes, stops and timings with map visualisation.</p>
-        </div>
-    </div>
-    <div class="maj-header-gold-line"></div>
+<body>
+<header class="main-header">
+    <img src="img/Logo 01.jpg" alt="MAJ Travel Logo" class="maj-logo">
+    <h1>Build Your Itinerary</h1>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="itinerary.html">Build Your Itinerary</a>
+        <a href="about.html">About</a>
+        <a href="print.html">Print View</a>
+    </nav>
 </header>
 
-<main class="maj-main maj-main-grid">
-    <!-- Left: itinerary form and drag/drop -->
-    <section class="maj-panel maj-panel-scroll">
-        <h2>Trip details</h2>
-        <div class="maj-form-group">
-            <label for="tripName">Trip name</label>
-            <input type="text" id="tripName" placeholder="e.g. Weymouth & Portland Coastal Explorer">
-        </div>
+<main class="content">
+    <section class="itinerary-builder">
+        <h2>Trip Details</h2>
+        <label>
+            Trip name:
+            <input type="text" id="tripName">
+        </label>
+        <label>
+            Start date:
+            <input type="date" id="tripStart">
+        </label>
 
-        <div class="maj-form-group">
-            <label for="tripDate">Start date</label>
-            <input type="date" id="tripDate">
-        </div>
+        <h2>Days</h2>
+        <button id="addDayBtn">Add Day</button>
+        <div id="daysContainer"></div>
 
-        <div class="maj-form-group">
-            <label for="tripNotes">Notes</label>
-            <textarea id="tripNotes" rows="3" placeholder="Key notes, coach constraints, comfort stops, etc."></textarea>
-        </div>
-
-        <h3>Days & stops (drag to reorder)</h3>
-        <div id="daysContainer" class="maj-days-container"></div>
-
-        <button id="addDayBtn" class="maj-btn maj-btn-secondary">Add day</button>
-    </section>
-
-    <!-- Right: map + controls -->
-    <section class="maj-panel">
-        <h2>Route map</h2>
-        <div id="map" class="maj-map"></div>
-
-        <div class="maj-form-group">
-            <label for="routeColour">Route colour</label>
-            <select id="routeColour">
-                <option value="#C9A86A">Gold (default)</option>
-                <option value="#1E90FF">Blue</option>
-                <option value="#32CD32">Green</option>
-                <option value="#FF4500">Orange/Red</option>
-            </select>
-        </div>
-
-        <div class="maj-button-row">
-            <button id="updateMapBtn" class="maj-btn maj-btn-primary">Update map</button>
-            <button id="downloadBtn" class="maj-btn maj-btn-outline">Download itinerary (JSON)</button>
-            <button id="printBtn" class="maj-btn maj-btn-outline">Print itinerary</button>
-            <button id="clearBtn" class="maj-btn maj-btn-danger">Clear all</button>
-        </div>
+        <button id="saveItineraryBtn">Save Itinerary</button>
+        <button id="goToPrintBtn" onclick="window.location.href='print.html'">Go to Print View</button>
     </section>
 </main>
 
-<footer class="maj-footer">
-    <p>© <span id="year"></span> MAJ Travel · contactmaj2025@gmail.com</p>
+<footer class="main-footer">
+    <p>© MAJ Travel</p>
 </footer>
-
-<!-- Leaflet JS (no integrity to avoid blocking) -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-<!-- Your app logic -->
-<script src="script.js"></script>
-<script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-</script>
 </body>
 </html>
